@@ -1,0 +1,84 @@
+import pygame
+import sys
+import datetime
+
+pygame.init()
+
+clock = pygame.time.Clock()
+
+# it will display on screen 
+screen = pygame.display.set_mode([600, 500])
+
+# basic font for user typed 
+base_font = pygame.font.Font(None, 32)
+
+def varpass(tobeconfirmed):
+    print(f"{tobeconfirmed} 1")
+
+class InputBox:
+    def __init__(self, x, y, w, h, text="", name=""):
+        self.rect = pygame.Rect(x, y, w, h)
+        self.color_passive = pygame.Color('chartreuse4')
+        self.color_active = pygame.Color('lightskyblue3')
+        self.color = self.color_passive
+        self.text = text
+        self.name = name
+        self.active = False
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            # If the user clicked on the input box, toggle the active state.
+            if self.rect.collidepoint(event.pos):
+                self.active = not self.active
+            else:
+                self.active = False
+            # Change the current colour of the input box.
+            self.color = self.color_active if self.active else self.color_passive
+
+        if event.type == pygame.KEYDOWN:
+            if self.active:
+                if event.key == pygame.K_RETURN:
+                    print(f"{self.name}: {self.text}")
+                elif event.key == pygame.K_BACKSPACE:
+                    self.text = self.text[:-1]
+                else:
+                    self.text += event.unicode
+
+    def update(self):
+        # Resize the box if the text is too long.
+        width = max(100, base_font.render(self.text, True, (255, 0, 0)).get_width() + 10)
+        self.rect.w = width
+
+    def draw(self, screen):
+        # Blit the text.
+        text_surface = base_font.render(self.text, True, (255, 0, 0))
+        screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
+        # Draw the rect.
+        pygame.draw.rect(screen, self.color, self.rect, 2)
+
+# Create multiple input boxes
+
+input_boxes = [
+    InputBox(100, 100, 140, 32, "Home Team", "Home"),
+    InputBox(100, 200, 140, 32, "Away Team", "Away"),
+    InputBox(100, 300, 140, 32, "Match Location", "Location"),
+]
+
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+        for box in input_boxes:
+            box.handle_event(event)
+
+    # Fill the screen with a white background
+    screen.fill((255, 255, 255))
+
+    for box in input_boxes:
+        box.update()
+        box.draw(screen)
+
+    pygame.display.flip()
+    clock.tick(60)
