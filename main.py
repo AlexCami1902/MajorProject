@@ -23,7 +23,8 @@ x = screen_surface.get_width()
 y = screen_surface.get_height()
 
 screen = pygame.display.set_mode((x, y))
-pygame.display.set_caption('Cricket Scoring App')
+
+
 inningschange = True
 # Set up font
 font = pygame.font.SysFont(None, 40)
@@ -195,7 +196,7 @@ def add_ball():
         backup(overs, runs, wickets)
 
 def result():
-    pass
+    import result
 
 def backup(ball, runs, wicket):
     pass
@@ -243,6 +244,10 @@ buttons = [ # (self, text, x, y, w, h, color, action=None)
 
 # Main game loop
 while True:
+    if innings == 1:
+        pygame.display.set_caption(f"First Innings")
+    elif innings == 2:
+        pygame.display.set_caption(f"Second Innings")
     if innings > 2:
         end_game()
     screen.fill(white)
