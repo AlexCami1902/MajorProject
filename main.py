@@ -2,9 +2,13 @@ import pygame # Import the pygame, sys & .csv libraries
 import sys
 import csv
 import time
+import os
 
 pygame.init() # Initialize pygame
 state = {"last": None}
+# Initialize the scores in state
+state["first_innings_score"] = 0
+state["second_innings_score"] = 0
 
 # Set default colours to refer to later on
 white = (255, 255, 255)
@@ -196,7 +200,14 @@ def add_ball():
         backup(overs, runs, wickets)
 
 def result():
-    import result
+    script_dir = os.path.dirname(__file__)  # Get the directory of the current script
+    result_file_path = os.path.join(script_dir, 'result.py')  # Construct the full path to result.py
+    try:
+        with open(result_file_path) as f:
+            code = f.read()
+            exec(code)
+    except FileNotFoundError:
+        print("result.py not found. Please ensure the file exists in the directory.")
 
 def backup(ball, runs, wicket):
     pass
@@ -214,17 +225,27 @@ def make_a_csv():
             writer.writeheader()
             writer.writerows(storage)
 
-def read_score():
-        storage.pop('Ball', None)
-        # Get the last score entry
-        last_entry = storage[max(storage.keys())]  # Get value from the highest ball key
+def read_score(): # The following code was modified by ChatGPT as it was broken
+    global storage
+    storage.pop('Ball', None)
 
-        # Extract the score after the slash
+    if storage:
+        # Get the last score entry for both innings
+        last_entry = storage[max(storage.keys())]  # Get value from the highest ball key
         last_score = int(last_entry.split('/')[1])
-        print(f"Total Score:  {last_score}")
-        state["last"] = last_score
-        print(state["last"])
-        start_innings()
+        print(f"Total Score: {last_score}")
+        
+        # Assuming we track both innings, for example:
+        if innings == 1:
+            state["first_innings_score"] = last_score
+        elif innings == 2:
+            state["second_innings_score"] = last_score
+        
+        # Write the scores to a file so result.py can read them
+        with open("final_scores.txt", "w") as f:
+            f.write(f"{state['first_innings_score']},{state['second_innings_score']}")
+
+    start_innings()
 
 # Create buttons
 
@@ -244,14 +265,19 @@ buttons = [ # (self, text, x, y, w, h, color, action=None)
 
 # Main game loop
 while True:
+    # If it's the second innings, set the final score to the target
+    final_score = state["last"]
+    if innings == 2:
+        final_score = state["first_innings_score"] + 1  # Target = first innings score + 1
+
     if innings == 1:
         pygame.display.set_caption(f"First Innings")
     elif innings == 2:
         pygame.display.set_caption(f"Second Innings")
     if innings > 2:
-        end_game()
+        result()
     screen.fill(white)
-    final_score = state["last"]
+    
     if noball_status:
         draw_text("Batter Can Only Be Out [Run Out, etc,]", font, red, screen, 200, 50)
 
