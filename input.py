@@ -12,10 +12,10 @@ screen = pygame.display.set_mode([600, 500])
 # basic font for user typed 
 base_font = pygame.font.Font(None, 32)
 
-def varpass(tobeconfirmed):
+def varpass(tobeconfirmed): # A test var
     print(f"{tobeconfirmed} 1")
 
-class InputBox:
+class InputBox: # Create an inputbox class to be refered to later on
     def __init__(self, x, y, w, h, text="", name=""):
         self.rect = pygame.Rect(x, y, w, h)
         self.color_passive = pygame.Color('chartreuse4')
@@ -27,36 +27,36 @@ class InputBox:
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            # If the user clicked on the input box, toggle the active state.
+            # If the user clicked on the input box, toggle the active state which moves the cursor.
             if self.rect.collidepoint(event.pos):
                 self.active = not self.active
             else:
                 self.active = False
-            # Change the current colour of the input box.
+            # Change the current colour of the input box to give the user a visual key that text needs to be entered.
             self.color = self.color_active if self.active else self.color_passive
 
         if event.type == pygame.KEYDOWN:
             if self.active:
                 if event.key == pygame.K_RETURN:
-                    print(f"{self.name}: {self.text}")
+                    print(f"{self.name}: {self.text}") # Prints the user's input to the terminal for backup
                 elif event.key == pygame.K_BACKSPACE:
-                    self.text = self.text[:-1]
+                    self.text = self.text[:-1] # Builds in backspace functionality
                 else:
                     self.text += event.unicode
 
     def update(self):
-        # Resize the box if the text is too long.
+        # Resize the box if the text entered is too long.
         width = max(100, base_font.render(self.text, True, (255, 0, 0)).get_width() + 10)
         self.rect.w = width
 
     def draw(self, screen):
-        # Blit the text.
+        # Blit the text to the screen.
         text_surface = base_font.render(self.text, True, (255, 0, 0))
         screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
-        # Draw the rect.
+        # Draw the rectangle.
         pygame.draw.rect(screen, self.color, self.rect, 2)
 
-# Create multiple input boxes
+# Create multiple input boxes from the class above
 
 input_boxes = [
     InputBox(100, 100, 140, 32, "Home Team", "Home"),
