@@ -240,6 +240,7 @@ def read_score(): # The following code was modified by ChatGPT as it was broken
             state["first_innings_score"] = last_score
         elif innings == 2:
             state["second_innings_score"] = last_score
+            
         
         # Write the scores to a file so result.py can read them
         with open("final_scores.txt", "w") as f:
@@ -274,10 +275,19 @@ while True:
         pygame.display.set_caption(f"First Innings")
     elif innings == 2:
         pygame.display.set_caption(f"Second Innings")
+        
     if innings > 2:
         result()
     screen.fill(white)
     
+    if innings == 2:
+        if runs > state["first_innings_score"]:
+            print(f"Innings: {innings}, Runs: {runs}, First Innings Score: {state['first_innings_score']}") # Debugging
+            with open("final_scores.txt", "w") as f:
+                f.write(f"{state['first_innings_score']},{runs}")
+            time.sleep(.5)
+            result()
+
     if noball_status:
         draw_text("Batter Can Only Be Out [Run Out, etc,]", font, red, screen, 200, 50)
 
