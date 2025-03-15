@@ -3,6 +3,7 @@ import sys
 import csv
 import time
 import os
+import numpy
 
 pygame.init() # Initialize pygame
 state = {"last": None}
@@ -267,6 +268,13 @@ buttons = [ # (self, text, x, y, w, h, color, action=None)
 # Main game loop
 while True:
     # If it's the second innings, set the final score to the target
+    if overs < 1:
+        run_rate = 0
+    else:
+        run_rate = runs/numpy.round(overs, 1)
+    if overs % 1 == 0:
+        predicted = (run_rate * (20 - numpy.round(overs, 1)))+runs
+    
     final_score = state["last"]
     if innings == 2:
         final_score = state["first_innings_score"] + 1  # Target = first innings score + 1
@@ -293,6 +301,11 @@ while True:
 
     if bye_status:
         draw_text("How Many Byes?", font, red, screen, 200, 50)
+
+    
+    draw_text(f"Run Rate: {round(run_rate, 2)}", font, black, screen, 50, 700)
+    
+    draw_text(f"Predicted Score: {round(predicted, 0)}", font, black, screen, 50, 600)
 
     draw_text(f"Required: {final_score}", font, black, screen, 50, 500)
 
