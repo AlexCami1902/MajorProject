@@ -10,6 +10,7 @@ state = {"last": None}
 # Initialize the scores in state
 state["first_innings_score"] = 0
 state["second_innings_score"] = 0
+history = []  # Stores (overs, runs, wickets, extras) for undo function later on
 
 # Set default colours to refer to later on
 white = (255, 255, 255)
@@ -111,6 +112,7 @@ def run_1():
     global runs
     global bye_status
     global extras
+    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
     if bye_status == True:
         extras += 1
         runs += 1
@@ -123,6 +125,7 @@ def run_2():
     global runs
     global bye_status
     global extras
+    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
     if bye_status == True:
         extras += 2
         runs += 2
@@ -135,6 +138,7 @@ def run_3():
     global runs
     global bye_status
     global extras
+    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
     if bye_status == True:
         extras += 3
         runs += 3
@@ -147,6 +151,7 @@ def run_4():
     global runs
     global bye_status
     global extras
+    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
     if bye_status == True:
         extras += 4
         runs +=4
@@ -159,6 +164,7 @@ def run_5():
     global runs
     global bye_status
     global extras
+    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
     if bye_status == True:
         extras += 5
         runs +=5
@@ -171,6 +177,7 @@ def run_6():
     global runs
     global extras
     global bye_status
+    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
     if bye_status == True:
         extras += 6
         runs += 6
@@ -182,23 +189,43 @@ def run_6():
 def add_wicket():
     global wickets
     if wickets < 10:
+        history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
         wickets += 1
         add_ball()
         if wickets == 10:
             read_score()
         
 def add_ball():
-    global overs
-    global runs
-    global wickets
+    global overs, runs, wickets, extras
+
+    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Append the history list for the undo fucntion
+
     if overs % 1 == 0.5: # Use the modulous operator to figure out the remainder of the overs
         overs += 0.5 # If the remainder is 0.5, it is the last ball of the over therefore, add 0.5 to make it a new over
-        overs = round(overs, 1) # Round to 1 d.p. to correct for any very small errors in the division
-        backup(overs, runs, wickets) # Send the results from this ball to the backup function
     else:
         overs += 0.1
-        overs = round(overs, 1)
-        backup(overs, runs, wickets)
+    overs = round(overs, 1) # Round to 1 d.p. to correct for any very small errors in the division
+
+    backup(overs, runs, wickets)  # Send the results from this ball to the backup function
+
+def undo():
+    global overs, runs, wickets, extras, noball_status, bye_status
+
+    for i in range(2):
+        if history:  # Check if there is a previous state to restore
+            prev_overs, prev_runs, prev_wickets, prev_extras, prev_noball, prev_bye = history.pop() # Gets the state of everything as recoreded in the history list.
+
+            # If the last action was a no-ball or wide, just remove the extra without undoing the ball count
+            if overs == prev_overs:  
+                extras = prev_extras  # Remove the extra runs
+                runs = prev_runs      # Remove the extra from the total runs
+                noball_status = prev_noball
+                bye_status = prev_bye
+                print(f"Undo (extra): Extras={extras}, Runs={runs}")  # Debugging output
+            else:
+                # Otherwise, undo everything (normal ball case)
+                overs, runs, wickets, extras, noball_status, bye_status = prev_overs, prev_runs, prev_wickets, prev_extras, prev_noball, prev_bye
+                print(f"Undo: Overs={overs}, Runs={runs}, Wickets={wickets}, Extras={extras}")  # Debugging output
 
 def result():
     script_dir = os.path.dirname(__file__)  # Get the directory of the current script
@@ -262,7 +289,8 @@ buttons = [ # (self, text, x, y, w, h, color, action=None)
     Button("Wicket", 220, 300, 100, 50, red, add_wicket),
     Button("N.B.",380, 300, 75, 50, red, noball),
     Button("Wide",500,300,90,50,red,wide),
-    Button("Bye",600,300,90,50,red,byes)
+    Button("Bye",600,300,90,50,red,byes),
+    Button("Undo", 700, 300, 90, 50, red, undo)
 ]
 
 # Main game loop
