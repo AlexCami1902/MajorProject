@@ -1,6 +1,9 @@
 import pygame
 import sys
 import time
+import shared
+print(f"Received Data -> Home: {shared.home_team}, Away: {shared.away_team}, Location: {shared.match_location}") # Testing reciept of score
+
 
 pygame.init()
 
@@ -32,11 +35,11 @@ while True:
 
     # Always using latest scores
     if first_innings_score > second_innings_score:
-        draw_text(f"Team 1 Wins! ({first_innings_score} vs {second_innings_score})", font, green, screen, 50, 50)
+        draw_text(f"{shared.home_team} Wins! ({first_innings_score} Runs vs {second_innings_score} Runs)", font, green, screen, 50, 50)
     elif second_innings_score > first_innings_score:
-        draw_text(f"Team 2 Wins! ({second_innings_score} vs {first_innings_score})", font, green, screen, 50, 50)
+        draw_text(f"{shared.away_team} Wins! ({second_innings_score} Runs vs {first_innings_score} Runs)", font, green, screen, 50, 50)
     else:
-        draw_text(f"It's a Draw! ({first_innings_score} vs {second_innings_score})", font, green, screen, 50, 50)
+        draw_text(f"It's a Draw! ({first_innings_score} Runs vs {second_innings_score} Runs)", font, green, screen, 50, 50)
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
