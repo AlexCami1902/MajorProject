@@ -4,9 +4,11 @@ import csv
 import time
 import os
 import numpy
+import shared
 
 pygame.init() # Initialize pygame
 state = {"last": None}
+print(f"Received Data -> Home: {shared.home_team}, Away: {shared.away_team}, Location: {shared.match_location}") # Testing reciept of score
 # Initialize the scores in state
 state["first_innings_score"] = 0
 state["second_innings_score"] = 0
@@ -308,9 +310,9 @@ while True:
         final_score = state["first_innings_score"] + 1  # Target = first innings score + 1
 
     if innings == 1:
-        pygame.display.set_caption(f"First Innings")
+        pygame.display.set_caption(f"{shared.home_team}'s Innings")
     elif innings == 2:
-        pygame.display.set_caption(f"Second Innings")
+        pygame.display.set_caption(f"{shared.away_team}'s Innings")
         
     if innings > 2:
         result()
