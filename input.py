@@ -1,7 +1,8 @@
 import pygame
 import sys
+import shared
 import datetime
-
+n = 0
 pygame.init()
 
 clock = pygame.time.Clock()
@@ -26,6 +27,7 @@ class InputBox: # Create an inputbox class to be refered to later on
         self.active = False
 
     def handle_event(self, event):
+        global n
         if event.type == pygame.MOUSEBUTTONDOWN:
             # If the user clicked on the input box, toggle the active state which moves the cursor.
             if self.rect.collidepoint(event.pos):
@@ -39,8 +41,16 @@ class InputBox: # Create an inputbox class to be refered to later on
             if self.active:
                 if event.key == pygame.K_RETURN:
                     print(f"{self.name}: {self.text}") # Prints the user's input to the terminal for backup
+                    n = n+1
+                    if n == 3:
+                        home_team = input_boxes[0].text
+                        away_team = input_boxes[1].text
+                        match_location = input_boxes[2].text
+                        varpass(home_team, away_team, match_location)  # Pass all three variables
+                        import main  # Run main.py
+
                 elif event.key == pygame.K_BACKSPACE:
-                    self.text = self.text[:-1] # Builds in backspace functionality
+                    self.text = self.text[:-1] # Builds backspace functionality
                 else:
                     self.text += event.unicode
 
@@ -57,6 +67,13 @@ class InputBox: # Create an inputbox class to be refered to later on
         pygame.draw.rect(screen, self.color, self.rect, 2)
 
 # Create multiple input boxes from the class above
+
+
+def varpass(home, away, location):
+    shared.home_team = home
+    shared.away_team = away
+    shared.match_location = location
+    print(f"Passing Data -> Home: {home}, Away: {away}, Location: {location}")
 
 input_boxes = [
     InputBox(100, 100, 140, 32, "Home Team", "Home"),
