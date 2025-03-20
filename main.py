@@ -244,16 +244,14 @@ def backup(ball, runs, wicket):
     score = f"{wicket}/{runs}"
     storage[ball] = score
     print(storage)
-    if ball > 10.0:
-        make_a_csv()
 
-def make_a_csv():
+"""def make_a_csv():
     pass
     with open('score_test.csv', mode='w') as csvfile:
             fieldnames = ["Ball", "Score"]
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
-            writer.writerows(storage)
+            writer.writerows(storage)"""
 
 def read_score(): # The following code was modified by ChatGPT as it was broken
     global storage
