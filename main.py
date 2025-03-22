@@ -243,15 +243,22 @@ def backup(ball, runs, wicket):
     pass
     score = f"{wicket}/{runs}"
     storage[ball] = score
-    print(storage)
+    make_a_csv()
 
-"""def make_a_csv():
-    pass
-    with open('score_test.csv', mode='w') as csvfile:
-            fieldnames = ["Ball", "Score"]
-            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-            writer.writeheader()
-            writer.writerows(storage)"""
+def make_a_csv():
+    global innings
+    if innings == 1:
+        with open('Innings1.csv', mode='w') as csvfile:
+                fieldnames = ["Ball", "Score", f"Innings: {innings}"]
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows([{"Ball": k, "Score": v} for k, v in storage.items()]) # Convert storage dictionary to a list of dictionaries
+    elif innings == 2:
+        with open('Innings2.csv', mode='w') as csvfile:
+                fieldnames = ["Ball", "Score", f"Innings: {innings}"]
+                writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows([{"Ball": k, "Score": v} for k, v in storage.items()]) # Convert storage dictionary to a list of dictionaries
 
 def read_score(): # The following code was modified by ChatGPT as it was broken
     global storage
