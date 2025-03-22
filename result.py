@@ -2,6 +2,7 @@ import pygame
 import sys
 import time
 import shared
+pygame.display.set_caption(f"Result")
 print(f"Received Data -> Home: {shared.home_team}, Away: {shared.away_team}, Location: {shared.match_location}") # Testing reciept of score
 
 
