@@ -1,18 +1,17 @@
-import pygame # Import the pygame, sys & .csv libraries
+import pygame # Import the pygame, sys, time, os, numpy & .csv libraries
 import sys
 import csv
 import time
 import os
 import numpy
-import shared
+import shared # Import the shared.py file to access the shared variables
 
 pygame.init() # Initialize pygame
 state = {"last": None}
 print(f"Received Data -> Home: {shared.home_team}, Away: {shared.away_team}, Location: {shared.match_location}") # Testing reciept of score
-# Initialize the scores in state
-state["first_innings_score"] = 0
+state["first_innings_score"] = 0 # Make the scores zero by default at the start of the game
 state["second_innings_score"] = 0
-history = []  # Stores (overs, runs, wickets, extras) for undo function later on
+history = []  # Stores (overs, runs, wickets, extras) in that format for undo function later on
 
 # Set default colours to refer to later on
 white = (255, 255, 255)
@@ -42,7 +41,7 @@ runs = 0
 extras = 0
 wickets = 0
 overs = 0.0
-innings = 1
+innings = 1 # Innings starts at 1 by default as there is no "0th" innings
 
 storage = {"Ball":"Score"}
 
@@ -69,13 +68,13 @@ class Button:
         if self.action:
             self.action()
 
-# Actions
+# Actions for the various buttons, to be implemented as part of the class later on
 
 def byes():
     global runs
     global extras
     global bye_status
-    bye_status = True
+    bye_status = True # Sets the bye status to true to let the code know to trigger the various events
 
 def wide():
     global runs
@@ -88,7 +87,7 @@ def noball():
     global overs
     global extras
     global noball_status
-    noball_status = True
+    noball_status = True # Sets the no-ball status to true to let the code know to trigger the various events
     runs += 1
     extras += 1
     
@@ -191,7 +190,7 @@ def run_6():
 def add_wicket():
     global wickets
     if wickets < 10:
-        history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
+        history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before making any changes
         wickets += 1
         add_ball()
         if wickets == 10:
@@ -200,13 +199,13 @@ def add_wicket():
 def add_ball():
     global overs, runs, wickets, extras
 
-    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Append the history list for the undo fucntion
+    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Appends the history list for the undo fucntion with the new ball
 
-    if overs % 1 == 0.5: # Use the modulous operator to figure out the remainder of the overs
-        overs += 0.5 # If the remainder is 0.5, it is the last ball of the over therefore, add 0.5 to make it a new over
+    if overs % 1 == 0.5: # Uses the modulous operator to figure out the remainder of the overs
+        overs += 0.5 # If the remainder is 0.5, it is the last ball of the over therefore, the code needs to add 0.5 to make it a new over
     else:
         overs += 0.1
-    overs = round(overs, 1) # Round to 1 d.p. to correct for any very small errors in the division
+    overs = round(overs, 1) # Round to 1 d.p. to correct for any very small errors in the division that can be multiplied and made larger
 
     backup(overs, runs, wickets)  # Send the results from this ball to the backup function
 
@@ -214,8 +213,8 @@ def undo():
     global overs, runs, wickets, extras, noball_status, bye_status
 
     for i in range(2):
-        if history:  # Check if there is a previous state to restore
-            prev_overs, prev_runs, prev_wickets, prev_extras, prev_noball, prev_bye = history.pop() # Gets the state of everything as recoreded in the history list.
+        if history:  # Check that there is a pervious ball otherwise the function will not work
+            prev_overs, prev_runs, prev_wickets, prev_extras, prev_noball, prev_bye = history.pop() # Gets the state of everything as recoreded in the history list. (Runs, extras, noballs, byes etc.)
 
             # If the last action was a no-ball or wide, just remove the extra without undoing the ball count
             if overs == prev_overs:  
@@ -223,44 +222,45 @@ def undo():
                 runs = prev_runs      # Remove the extra from the total runs
                 noball_status = prev_noball
                 bye_status = prev_bye
-                print(f"Undo (extra): Extras={extras}, Runs={runs}")  # Debugging output
+                print(f"Undo (extra): Extras={extras}, Runs={runs}")  # Debugging output REMOVE BEFORE SUBMISSION
             else:
                 # Otherwise, undo everything (normal ball case)
                 overs, runs, wickets, extras, noball_status, bye_status = prev_overs, prev_runs, prev_wickets, prev_extras, prev_noball, prev_bye
-                print(f"Undo: Overs={overs}, Runs={runs}, Wickets={wickets}, Extras={extras}")  # Debugging output
+                print(f"Undo: Overs={overs}, Runs={runs}, Wickets={wickets}, Extras={extras}")  # Debugging output REMOVE BEFORE SUBMISSION
 
 def result():
-    script_dir = os.path.dirname(__file__)  # Get the directory of the current script
+    script_dir = os.path.dirname(__file__)  # Get the directory of the current script to place the .csv file in the same directory
     result_file_path = os.path.join(script_dir, 'result.py')  # Construct the full path to result.py
     try:
         with open(result_file_path) as f:
             code = f.read()
             exec(code)
     except FileNotFoundError:
-        print("result.py not found. Please ensure the file exists in the directory.")
+        print("result.py not found. Please ensure the file exists in the directory.") # Making sure that all files are accesible in the directory
 
 def backup(ball, runs, wicket):
     pass
     score = f"{wicket}/{runs}"
     storage[ball] = score
-    make_a_csv()
+    make_a_csv() # Sends the backup of the file to the make_a_csv function to write the data to a .csv file
 
 def make_a_csv():
     global innings
-    if innings == 1:
+    if innings == 1: # Make 2 different .csv files for each innings
         with open('Innings1.csv', mode='w') as csvfile:
-                fieldnames = ["Ball", "Score", f"Innings: {innings}"]
+                fieldnames = ["Ball", "Score", f"Innings: {innings}"] # Set the column headers
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-                writer.writeheader()
+                writer.writeheader() # Write the headers
                 writer.writerows([{"Ball": k, "Score": v} for k, v in storage.items()]) # Convert storage dictionary to a list of dictionaries
     elif innings == 2:
         with open('Innings2.csv', mode='w') as csvfile:
                 fieldnames = ["Ball", "Score", f"Innings: {innings}"]
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
-                writer.writerows([{"Ball": k, "Score": v} for k, v in storage.items()]) # Convert storage dictionary to a list of dictionaries
+                writer.writerows([{"Ball": k, "Score": v} for k, v in storage.items()]) 
 
-def read_score(): # The following code was modified by ChatGPT as it was broken
+def read_score(): # The following code was modified by ChatGPT (See notes) as it was broken and was fixed by splitting the dictioanry, the intrinsic documentation is my own based on my understanding of the code
+    # ChatGPT Modification Begins
     global storage
     storage.pop('Ball', None)
 
@@ -268,22 +268,22 @@ def read_score(): # The following code was modified by ChatGPT as it was broken
         # Get the last score entry for both innings
         last_entry = storage[max(storage.keys())]  # Get value from the highest ball key
         last_score = int(last_entry.split('/')[1])
+        # ChatGPT Modification Ends
         print(f"Total Score: {last_score}")
         
-        # Assuming we track both innings, for example:
         if innings == 1:
-            state["first_innings_score"] = last_score
+            state["first_innings_score"] = last_score # Set the innings score to the last score recorded by the system
         elif innings == 2:
             state["second_innings_score"] = last_score
             
         
-        # Write the scores to a file so result.py can read them
+        # Write the scores to a file so result.py can read them, this was the easiest way to transfer the scores accross the files.
         with open("final_scores.txt", "w") as f:
             f.write(f"{state['first_innings_score']},{state['second_innings_score']}")
 
     start_innings()
 
-# Create buttons
+# Create buttons for the various actions using the Button class created earlier
 
 buttons = [ # (self, text, x, y, w, h, color, action=None)
     Button("1", 50, 200, 40, 50, green, run_1),
@@ -302,20 +302,20 @@ buttons = [ # (self, text, x, y, w, h, color, action=None)
 
 # Main game loop
 while True:
-    # If it's the second innings, set the final score to the target
+    # If it's the second innings, set the required score to the runs scored by team 1 then add 1 to win
     if overs < 1:
         run_rate = 0
     else:
-        run_rate = runs/numpy.round(overs, 1)
+        run_rate = runs/numpy.round(overs, 1) # Makes the runrate (1 d.p.)
     if overs % 1 == 0:
-        predicted = (run_rate * (20 - numpy.round(overs, 1)))+runs
+        predicted = (run_rate * (20 - numpy.round(overs, 1)))+runs # Calculates the projected total at the end of every over
     
     final_score = state["last"]
     if innings == 2:
         final_score = state["first_innings_score"] + 1  # Target = first innings score + 1
 
     if innings == 1:
-        pygame.display.set_caption(f"{shared.home_team}'s Innings")
+        pygame.display.set_caption(f"{shared.home_team}'s Innings") # Sets the title of the Pygame window to the team name for some customisation
     elif innings == 2:
         pygame.display.set_caption(f"{shared.away_team}'s Innings")
         
@@ -332,13 +332,13 @@ while True:
             result()
 
     if noball_status:
-        draw_text("Batter Can Only Be Out [Run Out, etc,]", font, red, screen, 200, 50)
+        draw_text("Batter Can Only Be Out [Run Out, etc,]", font, red, screen, 200, 50) # Prints a warning about the quirks of a noball
 
     if bye_status:
-        draw_text("How Many Byes?", font, red, screen, 200, 50)
+        draw_text("How Many Byes?", font, red, screen, 200, 50) # Asks the user how many byes were scored
 
     
-    draw_text(f"Run Rate: {round(run_rate, 2)}", font, black, screen, 50, 700)
+    draw_text(f"Run Rate: {round(run_rate, 2)}", font, black, screen, 50, 700) # Print the various calculations made
     
     draw_text(f"Predicted Score: {round(predicted, 0)}", font, black, screen, 50, 600)
 
