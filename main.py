@@ -21,14 +21,10 @@ green = (0, 255, 0)
 red = (255, 0, 0)
 homecolour = home_team_colour
 awaycolour = away_team_colour
-try:
-    print(f"Away Team Colour: {awaycolour}")
-except NameError:
+# Check if the colours are black, if so change them to red and green 
+if awaycolour == pygame.Color(0, 0, 0, 255):
     awaycolour = red
-
-try:
-    print(f"Home Team Colour: {homecolour}")
-except NameError:
+if homecolour == pygame.Color(0, 0, 0, 255):
     homecolour = green
 noball_status = False
 bye_status = False
