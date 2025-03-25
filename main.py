@@ -54,22 +54,22 @@ innings = 1 # Innings starts at 1 by default as there is no "0th" innings
 storage = {"Ball":"Score"}
 
 # Function to draw text
-def draw_text(text, font, color, surface, x, y):
-    textobj = font.render(text, True, color)
+def draw_text(text, font, colour, surface, x, y):
+    textobj = font.render(text, True, colour)
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
 # Button class
 class Button:
-    def __init__(self, text, x, y, w, h, color, action=None):
+    def __init__(self, text, x, y, w, h, colour, action=None):
         self.text = text
         self.rect = pygame.Rect(x, y, w, h)
-        self.color = color
+        self.colour = colour
         self.action = action
 
     def draw(self, screen):
-        pygame.draw.rect(screen, self.color, self.rect)
+        pygame.draw.rect(screen, self.colour, self.rect)
         draw_text(self.text, font, white, screen, self.rect.x + 10, self.rect.y + 10)
 
     def click(self):
@@ -293,7 +293,7 @@ def read_score(): # The following code was modified by ChatGPT (See notes) as it
 
 # Create buttons for the various actions using the Button class created earlier
 
-buttons = [ # (self, text, x, y, w, h, color, action=None)
+buttons = [ # (self, text, x, y, w, h, colour, action=None)
     Button("1", 50, 200, 40, 50, homecolour, run_1),
     Button("2", 100, 200, 40, 50, homecolour, run_2),
     Button("3", 150, 200, 40, 50, homecolour, run_3),
