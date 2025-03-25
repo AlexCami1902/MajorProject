@@ -5,6 +5,7 @@ import time
 import os
 import numpy
 import shared # Import the shared.py file to access the shared variables
+from shared import home_team_colour, away_team_colour
 
 pygame.init() # Initialize pygame
 state = {"last": None}
@@ -18,6 +19,17 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 green = (0, 255, 0)
 red = (255, 0, 0)
+homecolour = home_team_colour
+awaycolour = away_team_colour
+try:
+    print(f"Away Team Colour: {awaycolour}")
+except NameError:
+    awaycolour = red
+
+try:
+    print(f"Home Team Colour: {homecolour}")
+except NameError:
+    homecolour = green
 noball_status = False
 bye_status = False
 innings = 1
@@ -286,18 +298,18 @@ def read_score(): # The following code was modified by ChatGPT (See notes) as it
 # Create buttons for the various actions using the Button class created earlier
 
 buttons = [ # (self, text, x, y, w, h, color, action=None)
-    Button("1", 50, 200, 40, 50, green, run_1),
-    Button("2", 100, 200, 40, 50, green, run_2),
-    Button("3", 150, 200, 40, 50, green, run_3),
-    Button("4", 200, 200, 40, 50, green, run_4),
-    Button("5", 250, 200, 40, 50, green, run_5),
-    Button("6", 300, 200, 40, 50, green, run_6),
-    Button("0", 350, 200, 40, 50, green, add_ball),
-    Button("Wicket", 220, 300, 100, 50, red, add_wicket),
-    Button("N.B.",380, 300, 75, 50, red, noball),
-    Button("Wide",500,300,90,50,red,wide),
-    Button("Bye",600,300,90,50,red,byes),
-    Button("Undo", 700, 300, 90, 50, red, undo)
+    Button("1", 50, 200, 40, 50, homecolour, run_1),
+    Button("2", 100, 200, 40, 50, homecolour, run_2),
+    Button("3", 150, 200, 40, 50, homecolour, run_3),
+    Button("4", 200, 200, 40, 50, homecolour, run_4),
+    Button("5", 250, 200, 40, 50, homecolour, run_5),
+    Button("6", 300, 200, 40, 50, homecolour, run_6),
+    Button("0", 350, 200, 40, 50, homecolour, add_ball),
+    Button("Wicket", 220, 300, 100, 50, awaycolour, add_wicket),
+    Button("N.B.",380, 300, 75, 50, awaycolour, noball),
+    Button("Wide",500,300,90,50,awaycolour,wide),
+    Button("Bye",600,300,90,50,awaycolour,byes),
+    Button("Undo", 700, 300, 90, 50, awaycolour, undo)
 ]
 
 # Main game loop
