@@ -20,7 +20,7 @@ gray = (200, 200, 200)
 font = pygame.font.Font(None, 36)
 
 def start_match():
-    home_team = input()
+    home_team = inputs()
 
 # Original Button class
 class Button:
@@ -57,7 +57,7 @@ while True:
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if StartButton.is_clicked(event.pos):
-                import input
+                import Major_Project.inputs as inputs
             elif EndButton.is_clicked(event.pos):
                 screen.fill(blue)
 
