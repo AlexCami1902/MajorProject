@@ -5,7 +5,7 @@ import time
 import os
 import numpy
 import shared # Import the shared.py file to access the shared variables
-from shared import home_team_colour, away_team_colour
+from shared import home_team_colour, away_team_colour # Specifcally get these variables.
 
 pygame.init() # Initialize pygame
 state = {"last": None}
