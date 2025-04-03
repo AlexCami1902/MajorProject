@@ -3,15 +3,16 @@ import sys
 import pygame_gui
 import shared
 n = 0
+pygame.init() # THIS MUST BE CALLED FIRST TO AVOID ERRORS
 
+ui_manager = pygame_gui.UIManager((600, 500))
 global home_team_colour, away_team_colour
 home_team_colour = pygame.Color(0, 0, 0)
 away_team_colour = pygame.Color(0, 0, 0)
 
-pygame.init()
 screen = pygame.display.set_mode([600, 500])
 pygame.display.set_caption("Team Input and Colour Picker")
-ui_manager = pygame_gui.UIManager((600, 500))
+
 clock = pygame.time.Clock()
 
 base_font = pygame.font.Font(None, 32)
