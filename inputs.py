@@ -2,10 +2,15 @@ import pygame
 import sys
 import pygame_gui
 import shared
+import random
 n = 0
 pygame.init() # THIS MUST BE CALLED FIRST TO AVOID ERRORS
+screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)  # Fullscreen mode
+screen_surface = pygame.display.get_surface()
+x, y = screen_surface.get_width(), screen_surface.get_height()
 
-ui_manager = pygame_gui.UIManager((600, 500))
+# Ensure UI manager uses correct size
+ui_manager = pygame_gui.UIManager((x, y))
 global home_team_colour, away_team_colour
 home_team_colour = pygame.Color(0, 0, 0)
 away_team_colour = pygame.Color(0, 0, 0)
@@ -70,10 +75,10 @@ input_boxes = [
     InputBox(100, 300, 140, 32, "Match Location", "Location"),
 ]
 
-home_colour_picker_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(250, 100, 100, 30),
+home_colour_picker_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(400, 100, 100, 30),
                                                           text='Pick Colour',
                                                           manager=ui_manager)
-away_colour_picker_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(250, 200, 100, 30),
+away_colour_picker_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(400, 200, 100, 30),
                                                           text='Pick Colour',
                                                           manager=ui_manager)
 colour_picker = None
