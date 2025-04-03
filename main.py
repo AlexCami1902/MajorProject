@@ -3,15 +3,16 @@ import sys
 import csv
 import time
 import os
+import random
 import numpy
 import shared # Import the shared.py file to access the shared variables
-from shared import home_team_colour, away_team_colour # Specifcally get these variables.
+from shared import home_team_colour, away_team_colour
 
 pygame.init() # Initialize pygame
 state = {"last": None}
 print(f"Received Data -> Home: {shared.home_team}, Away: {shared.away_team}, Location: {shared.match_location}") # Testing reciept of score
 state["first_innings_score"] = 0 # Make the scores zero by default at the start of the game
-state["second_innings_score"] = 0
+state["second_innings_score"] = 0 
 history = []  # Stores (overs, runs, wickets, extras) in that format for undo function later on
 
 # Set default colours to refer to later on
@@ -29,8 +30,14 @@ if homecolour == pygame.Color(0, 0, 0, 255):
 noball_status = False
 bye_status = False
 innings = 1
-required = 50
 runs1 = 0
+innings1 = 0
+outcomes = [1, 2] # Set the possible outcomes for the first innings this simulates a coin flip as no one carrys a coin to games anymore
+random_outcome = random.choice(outcomes) # Randomly selects a team to bat first
+if random_outcome == 1:
+    innings1 = 1
+elif random_outcome == 2:
+    innings1 = 2
 
 screen = pygame.display.set_mode()
 screen_surface = pygame.display.get_surface()
@@ -323,9 +330,17 @@ while True:
         final_score = state["first_innings_score"] + 1  # Target = first innings score + 1
 
     if innings == 1:
-        pygame.display.set_caption(f"{shared.home_team}'s Innings") # Sets the title of the Pygame window to the team name for some customisation
+        if innings1 == 1:
+            pygame.display.set_caption(f"{shared.home_team}'s Innings") # Sets the title of the Pygame window to the team name for some customisation
+            innings2 = 1
+        elif innings1 == 2:
+            pygame.display.set_caption(f"{shared.away_team}'s Innings")
+            innings2 = 2
     elif innings == 2:
-        pygame.display.set_caption(f"{shared.away_team}'s Innings")
+        if innings2 == 1:
+            pygame.display.set_caption(f"{shared.away_team}'s Innings")
+        elif innings2 == 2:
+            pygame.display.set_caption(f"{shared.home_team}'s Innings")
         
     if innings > 2:
         result()
