@@ -331,16 +331,21 @@ while True:
 
     if innings == 1:
         if innings1 == 1:
-            pygame.display.set_caption(f"{shared.home_team}'s Innings") # Sets the title of the Pygame window to the team name for some customisation
+            pygame.display.set_caption(f"{shared.home_team}'s Innings")
             innings2 = 1
+            shared.first_batting_team = shared.home_team
+            shared.second_batting_team = shared.away_team
         elif innings1 == 2:
             pygame.display.set_caption(f"{shared.away_team}'s Innings")
             innings2 = 2
+            shared.first_batting_team = shared.away_team
+            shared.second_batting_team = shared.home_team
     elif innings == 2:
         if innings2 == 1:
             pygame.display.set_caption(f"{shared.away_team}'s Innings")
         elif innings2 == 2:
             pygame.display.set_caption(f"{shared.home_team}'s Innings")
+
         
     if innings > 2:
         result()
