@@ -34,11 +34,11 @@ while True:
 
     screen.fill(white)
 
-    # Always using latest scores
+    # Constantly monotoring the scores to see if there is a winner
     if first_innings_score > second_innings_score:
-        draw_text(f"{shared.home_team} Wins! ({first_innings_score} Runs vs {second_innings_score} Runs)", font, green, screen, 50, 50)
+        draw_text(f"{shared.first_batting_team} Wins! ({first_innings_score} Runs vs {second_innings_score} Runs)", font, green, screen, 50, 50)
     elif second_innings_score > first_innings_score:
-        draw_text(f"{shared.away_team} Wins! ({second_innings_score} Runs vs {first_innings_score} Runs)", font, green, screen, 50, 50)
+        draw_text(f"{shared.second_batting_team} Wins! ({second_innings_score} Runs vs {first_innings_score} Runs)", font, green, screen, 50, 50)
     else:
         draw_text(f"It's a Draw! ({first_innings_score} Runs vs {second_innings_score} Runs)", font, green, screen, 50, 50)
 
