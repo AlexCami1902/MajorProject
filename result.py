@@ -23,6 +23,7 @@ def draw_text(text, font, color, surface, x, y):
 
 while True:
     # Read the scores on every loop iteration
+    # Various try/execpt statements to weed out potential errors that could occur and interfere with scoring system
     try:
         with open("final_scores.txt", "r") as f:  # Fix: Removed space in filename
             first_innings_score, second_innings_score = map(int, f.read().strip().split(","))
@@ -34,11 +35,11 @@ while True:
 
     screen.fill(white)
 
-    # Always using latest scores
+    # Constantly monotoring the scores to see if there is a winner
     if first_innings_score > second_innings_score:
-        draw_text(f"{shared.home_team} Wins! ({first_innings_score} Runs vs {second_innings_score} Runs)", font, green, screen, 50, 50)
+        draw_text(f"{shared.first_batting_team} Wins! ({first_innings_score} Runs vs {second_innings_score} Runs)", font, green, screen, 50, 50)
     elif second_innings_score > first_innings_score:
-        draw_text(f"{shared.away_team} Wins! ({second_innings_score} Runs vs {first_innings_score} Runs)", font, green, screen, 50, 50)
+        draw_text(f"{shared.second_batting_team} Wins! ({second_innings_score} Runs vs {first_innings_score} Runs)", font, green, screen, 50, 50)
     else:
         draw_text(f"It's a Draw! ({first_innings_score} Runs vs {second_innings_score} Runs)", font, green, screen, 50, 50)
 
