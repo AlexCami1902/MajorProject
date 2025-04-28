@@ -57,7 +57,7 @@ while True:
             sys.exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             if StartButton.is_clicked(event.pos):
-                import Major_Project.inputs as inputs
+                import inputs as inputs
             elif EndButton.is_clicked(event.pos):
                 screen.fill(blue)
 
