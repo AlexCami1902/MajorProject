@@ -75,12 +75,8 @@ input_boxes = [
     InputBox(100, 300, 140, 32, "Match Location", "Location"),
 ]
 
-home_colour_picker_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(400, 100, 100, 30),
-                                                          text='Pick Colour',
-                                                          manager=ui_manager)
-away_colour_picker_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(400, 200, 100, 30),
-                                                          text='Pick Colour',
-                                                          manager=ui_manager)
+home_colour_picker_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(400, 100, 100, 30), text='Pick Colour', manager=ui_manager)
+away_colour_picker_button = pygame_gui.elements.UIButton(relative_rect=pygame.Rect(400, 200, 100, 30), text='Pick Colour', manager=ui_manager)
 colour_picker = None
 current_picker_target = None  # Track which team's color is being changed
 running = True
@@ -97,16 +93,10 @@ while running:
         
         if event.type == pygame_gui.UI_BUTTON_PRESSED:
             if event.ui_element == home_colour_picker_button:
-                colour_picker = pygame_gui.windows.UIColourPickerDialog(pygame.Rect(160, 50, 420, 400),
-                                                                        ui_manager,
-                                                                        window_title="Pick Home Team Colour",
-                                                                        initial_colour=home_team_colour)
+                colour_picker = pygame_gui.windows.UIColourPickerDialog(pygame.Rect(160, 50, 420, 400), ui_manager, window_title="Pick Home Team Colour", initial_colour=home_team_colour)
                 current_picker_target = "home"
             elif event.ui_element == away_colour_picker_button:
-                colour_picker = pygame_gui.windows.UIColourPickerDialog(pygame.Rect(160, 50, 420, 400),
-                                                                        ui_manager,
-                                                                        window_title="Pick Away Team Colour",
-                                                                        initial_colour=away_team_colour)
+                colour_picker = pygame_gui.windows.UIColourPickerDialog(pygame.Rect(160, 50, 420, 400), ui_manager, window_title="Pick Away Team Colour", initial_colour=away_team_colour)
                 current_picker_target = "away"
         
         
