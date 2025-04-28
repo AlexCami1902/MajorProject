@@ -27,6 +27,7 @@ if awaycolour == pygame.Color(0, 0, 0, 255):
     awaycolour = red
 if homecolour == pygame.Color(0, 0, 0, 255):
     homecolour = green
+# Sets up various pre-game variables that are refered to and used throught the program, most of these global variables act as 'flags' for potnetial logic error i.e. 3rd innings
 noball_status = False
 bye_status = False
 innings = 1
@@ -115,6 +116,7 @@ def start_innings():
     global runs
     global inningschange
 
+    # Sets the scores to 0
     extras = 0
     runs = 0
     wickets = 0
@@ -308,11 +310,12 @@ buttons = [ # (self, text, x, y, w, h, colour, action=None)
     Button("5", 250, 200, 40, 50, homecolour, run_5),
     Button("6", 300, 200, 40, 50, homecolour, run_6),
     Button("0", 350, 200, 40, 50, homecolour, add_ball),
-    Button("Wicket", 220, 300, 100, 50, awaycolour, add_wicket),
-    Button("N.B.",380, 300, 75, 50, awaycolour, noball),
-    Button("Wide",500,300,90,50,awaycolour,wide),
-    Button("Bye",600,300,90,50,awaycolour,byes),
-    Button("Undo", 700, 300, 90, 50, awaycolour, undo)
+    Button("Wicket", 200, 300, 100, 50, awaycolour, add_wicket),
+    Button("N.B.",310, 300, 75, 50, awaycolour, noball),
+    Button("Wide",395,300,90,50,awaycolour,wide),
+    Button("Bye",495,300,90,50,awaycolour,byes),
+    Button("Undo", 595, 300, 90, 50, awaycolour, undo),
+    Button("Fudge Runs", 695, 300, 180, 50, awaycolour, wide)
 ]
 
 # Main game loop
