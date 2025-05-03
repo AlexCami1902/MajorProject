@@ -20,7 +20,8 @@ pygame.display.set_caption("Team Input and Colour Picker")
 
 clock = pygame.time.Clock()
 
-base_font = pygame.font.Font(None, 32)
+base_font = pygame.font.Font("fonts/PublicSans-Bold.ttf", 24)
+
 def varpass(home, away, location):
     shared.home_team = home
     shared.away_team = away
