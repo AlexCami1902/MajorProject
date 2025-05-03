@@ -50,7 +50,9 @@ screen = pygame.display.set_mode((x, y))
 
 inningschange = True
 # Set up font
-font = pygame.font.Font("fonts/PublicSans-Bold.ttf", 24)
+font_regular = pygame.font.Font("fonts/PublicSans-Bold.ttf", 24)
+font_bold = pygame.font.Font("fonts/PublicSans-Black.ttf", 24)
+font = font_regular  # Start with regular
 
 # Game variables
 runs = 0
@@ -300,6 +302,14 @@ def read_score(): # The following code was modified by ChatGPT (See notes) as it
 
     start_innings()
 
+def toggle_bold(): # Function to toggle between regular and bold font
+    global font, bold_enabled
+    bold_enabled = not bold_enabled
+    if bold_enabled:
+        font = font_bold
+    else:
+        font = font_regular
+
 # Create buttons for the various actions using the Button class created earlier
 
 buttons = [ # (self, text, x, y, w, h, colour, action=None)
@@ -315,10 +325,13 @@ buttons = [ # (self, text, x, y, w, h, colour, action=None)
     Button("Wide",395,300,90,50,awaycolour,wide),
     Button("Bye",495,300,90,50,awaycolour,byes),
     Button("Undo", 595, 300, 90, 50, awaycolour, undo),
-    Button("Fudge Runs", 695, 300, 180, 50, awaycolour, wide)
+    Button("Fudge Runs", 695, 300, 180, 50, awaycolour, wide),
+    Button("Bold", 50, 400, 80, 50, black, toggle_bold)
 ]
 
 # Main game loop
+bold_enabled = False
+
 while True:
     # If it's the second innings, set the required score to the runs scored by team 1 then add 1 to win
     if overs < 1:
