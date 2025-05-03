@@ -50,7 +50,7 @@ screen = pygame.display.set_mode((x, y))
 
 inningschange = True
 # Set up font
-font = pygame.font.SysFont(None, 40)
+font = pygame.font.Font("fonts/PublicSans-Bold.ttf", 24)
 
 # Game variables
 runs = 0
