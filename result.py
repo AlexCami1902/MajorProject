@@ -13,7 +13,8 @@ white = (255, 255, 255)
 black = (0, 0, 0)
 green = (0, 255, 0)
 red = (255, 0, 0)
-font = pygame.font.SysFont(None, 40)
+font = font = pygame.font.Font("fonts/Roboto-Bold.ttf", 24)
+
 
 def draw_text(text, font, color, surface, x, y):
     textobj = font.render(text, True, color)
