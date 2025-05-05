@@ -82,9 +82,14 @@ class Button:
         pygame.draw.rect(screen, self.colour, self.rect)
         draw_text(self.text, font, white, screen, self.rect.x + 10, self.rect.y + 10)
 
-    def click(self):
-        if self.action:
-            self.action()
+    def is_clicked(self, pos):
+        return self.rect.collidepoint(pos)
+
+    def handle_event(self, event):
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if self.is_clicked(event.pos):
+                if self.action:
+                    self.action()
 
 # Actions for the various buttons, to be implemented as part of the class later on
 
@@ -128,82 +133,19 @@ def start_innings():
 def end_game():
     pygame.quit()
 
-def run_1():
+def scoring(ballscore):
+    print("Button clicked")
     global runs
     global bye_status
     global extras
+    int(ballscore)
     history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
     if bye_status == True:
-        extras += 1
-        runs += 1
+        extras += ballscore
+        runs += ballscore
         bye_status = False
     else:
-        runs += 1
-    add_ball()
-
-def run_2():
-    global runs
-    global bye_status
-    global extras
-    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
-    if bye_status == True:
-        extras += 2
-        runs += 2
-        bye_status = False
-    else:
-        runs += 2
-    add_ball()
-
-def run_3():
-    global runs
-    global bye_status
-    global extras
-    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
-    if bye_status == True:
-        extras += 3
-        runs += 3
-        bye_status = False
-    else:
-        runs += 3
-    add_ball()
-
-def run_4():
-    global runs
-    global bye_status
-    global extras
-    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
-    if bye_status == True:
-        extras += 4
-        runs +=4
-        bye_status = False
-    else:
-        runs += 4
-    add_ball()
-
-def run_5():
-    global runs
-    global bye_status
-    global extras
-    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
-    if bye_status == True:
-        extras += 5
-        runs +=5
-        bye_status = False
-    else:
-        runs += 5
-    add_ball()
-
-def run_6():
-    global runs
-    global extras
-    global bye_status
-    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
-    if bye_status == True:
-        extras += 6
-        runs += 6
-        bye_status = False
-    else:
-        runs += 6
+        runs += ballscore
     add_ball()
 
 def add_wicket():
@@ -313,12 +255,12 @@ def toggle_bold(): # Function to toggle between regular and bold font
 # Create buttons for the various actions using the Button class created earlier
 
 buttons = [ # (self, text, x, y, w, h, colour, action=None)
-    Button("1", 50, 200, 40, 50, homecolour, run_1),
-    Button("2", 100, 200, 40, 50, homecolour, run_2),
-    Button("3", 150, 200, 40, 50, homecolour, run_3),
-    Button("4", 200, 200, 40, 50, homecolour, run_4),
-    Button("5", 250, 200, 40, 50, homecolour, run_5),
-    Button("6", 300, 200, 40, 50, homecolour, run_6),
+    Button("1", 50, 200, 40, 50, homecolour, lambda: scoring(1)),
+    Button("2", 100, 200, 40, 50, homecolour, lambda: scoring(2)),
+    Button("3", 150, 200, 40, 50, homecolour, lambda: scoring(3)),
+    Button("4", 200, 200, 40, 50, homecolour, lambda: scoring(4)),
+    Button("5", 250, 200, 40, 50, homecolour, lambda: scoring(5)),
+    Button("6", 300, 200, 40, 50, homecolour, lambda: scoring(6)),
     Button("0", 350, 200, 40, 50, homecolour, add_ball),
     Button("Wicket", 200, 300, 100, 50, awaycolour, add_wicket),
     Button("N.B.",310, 300, 75, 50, awaycolour, noball),
@@ -397,8 +339,7 @@ while True:
             noball_status = False
             # Check if buttons are clicked
             for button in buttons:
-                if button.rect.collidepoint(event.pos):
-                    button.click()
+                button.handle_event(event)
 
     # Draw the score display
     draw_text(f"Runs: {runs}", font, black, screen, 50, 0)
