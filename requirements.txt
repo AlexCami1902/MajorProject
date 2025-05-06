@@ -2,4 +2,4 @@ pygame==2.1.2
 numpy==1.23.5
 matplotlib==3.6.2
 pandas==1.5.1
-pygame_gui=0.6.10
+pygame_gui==0.6.10
