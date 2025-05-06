@@ -41,26 +41,22 @@ Here's a breakdown of the key files:
 Ensure a Fonts folder exists with the required font files (.ttf) for proper rendering.
 
 ✅ Features
-Real-time match scoring
 
-Custom team colours
-
-Clean, interactive interface
-
-Easy-to-use for non-technical scorers
+- Real-time match scoring
+- Custom team colours
+- Clean, interactive interface
+- Easy-to-use for non-technical scorers
 
 🚧 Known Limitations
-No save/load functionality
 
-Designed primarily for desktop/laptop use
+- No save/load functionality
+- Designed primarily for desktop/laptop use
 
 🔭 Roadmap (Possible Future Features)
 
-Match history and statistics
-
-Enhanced UI and accessibility
-
-AI-based score prediction
+- Match history and statistics
+- Enhanced UI and accessibility
+- AI-based score prediction
 
 📝 License
 Currently released for educational and testing purposes only. A formal license may be added in a future release.
