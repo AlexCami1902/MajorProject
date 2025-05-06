@@ -1,5 +1,5 @@
-# 🏏 MajorProject – MyScore
-
+# 🏏 MajorProject – MyScore 🏏 #
+---
 A simple yet functional cricket scoring app developed in Python with Pygame. Designed for local or school-level matches, **MyScore** helps users keep track of scores, wickets, and overs through an intuitive GUI.
 
 **Author:** Alexander Camilleri  
