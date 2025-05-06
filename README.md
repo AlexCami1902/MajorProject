@@ -28,14 +28,15 @@ Begin the match
 📁 Project Structure
 Here's a breakdown of the key files:
 
-File	Description
-startmatch.py	Launches the program and manages pre-game setup
-main.py	Handles in-game logic and display
-button.py	Contains reusable button components
-inputs.py	Manages text input fields
-result.py	Displays the result screen
-shared.py	Stores global variables and shared logic
-requirements.txt	Lists all necessary Python packages
+| File | Description |
+| --- | --- |
+| startmatch.py | Launches the program and manages pre-game setup |
+| main.py | Handles in-game logic and display |
+| button.py | Contains reusable button components |
+| inputs.py | Manages text input fields |
+| result.py | Displays the result screen |
+| shared.py | Stores global variables and shared logic |
+| requirements.txt | Lists all necessary Python packages |
 
 Ensure a Fonts folder exists with the required font files (.ttf) for proper rendering.
 
