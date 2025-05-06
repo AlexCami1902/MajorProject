@@ -52,14 +52,9 @@ Easy-to-use for non-technical scorers
 🚧 Known Limitations
 No save/load functionality
 
-Results aren't exported or saved
-
-Screen resizing not supported
-
 Designed primarily for desktop/laptop use
 
 🔭 Roadmap (Possible Future Features)
-Match data export (CSV or PDF)
 
 Match history and statistics
 
