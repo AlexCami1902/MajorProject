@@ -254,7 +254,7 @@ def toggle_bold(): # Function to toggle between regular and bold font
 
 # Create buttons for the various actions using the Button class created earlier
 
-buttons = [ # (self, text, x, y, w, h, colour, action=None)
+buttons = [ # (text, x, y, w, h, colour, action=None)
     Button("1", 50, 200, 40, 50, homecolour, lambda: scoring(1)),
     Button("2", 100, 200, 40, 50, homecolour, lambda: scoring(2)),
     Button("3", 150, 200, 40, 50, homecolour, lambda: scoring(3)),
@@ -280,6 +280,8 @@ while True:
         run_rate = 0
     else:
         run_rate = runs/numpy.round(overs, 1) # Makes the runrate (1 d.p.)
+        if run_rate > 36:
+            run_rate = 36
     if overs % 1 == 0:
         predicted = (run_rate * (20 - numpy.round(overs, 1)))+runs # Calculates the projected total at the end of every over
     
