@@ -70,8 +70,7 @@ class InputBox:
 
     def draw(self, screen):
         # Render placeholder in gray if empty
-        text_surface = base_font.render(self.text if self.text else self.placeholder, True,
-                                        (255, 0, 0) if self.text else (150, 150, 150))
+        text_surface = base_font.render(self.text if self.text else self.placeholder, True, (255, 0, 0) if self.text else (150, 150, 150))
         screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
         pygame.draw.rect(screen, self.color, self.rect, 2)
 
