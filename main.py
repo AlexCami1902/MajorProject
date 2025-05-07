@@ -320,10 +320,10 @@ while True:
             result()
 
     if noball_status:
-        draw_text("Batter Can Only Be Out [Run Out, etc,]", font, red, screen, 200, 50) # Prints a warning about the quirks of a noball
+        draw_text("Batter can only be out run out, hitting the ball twice or obstructing the field", font, red, screen, 200, 50) # Prints a warning about the quirks of a noball
 
     if bye_status:
-        draw_text("How Many Byes?", font, red, screen, 200, 50) # Asks the user how many byes were scored
+        draw_text("How many byes?", font, red, screen, 200, 50) # Asks the user how many byes were scored
 
     
     draw_text(f"Run Rate: {round(run_rate, 2)}", font, black, screen, 50, 700) # Print the various calculations made
