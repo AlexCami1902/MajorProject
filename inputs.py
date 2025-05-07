@@ -37,18 +37,16 @@ def varpass(home, away, location):
     print(f"Passing Data -> Home: {home}, Away: {away}, Location: {location}")
 
 class InputBox:
-    def __init__(self, x, y, w, h, text="", name=""):
+    def __init__(self, x, y, w, h, placeholder="", name=""):
         self.rect = pygame.Rect(x, y, w, h)
-        self.color_passive = green
-        self.color_active = red
+        self.color_passive = pygame.Color('chartreuse4')
+        self.color_active = pygame.Color('lightskyblue3')
         self.color = self.color_passive
-        self.text = text
+        self.text = ""
+        self.placeholder = placeholder
         self.name = name
         self.active = False
-        self.cursor_visible = True
-        self.cursor_counter = 0
-        self.cursor_position = len(text)
-    
+
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.rect.collidepoint(event.pos):
@@ -56,45 +54,29 @@ class InputBox:
             else:
                 self.active = False
             self.color = self.color_active if self.active else self.color_passive
-        
+
         if event.type == pygame.KEYDOWN and self.active:
-            if event.key == pygame.K_BACKSPACE:
-                if self.cursor_position > 0:
-                    self.text = self.text[:self.cursor_position - 1] + self.text[self.cursor_position:]
-                    self.cursor_position -= 1
-            elif event.key == pygame.K_DELETE:
-                if self.cursor_position < len(self.text):
-                    self.text = self.text[:self.cursor_position] + self.text[self.cursor_position + 1:]
-            elif event.key == pygame.K_LEFT:
-                if self.cursor_position > 0:
-                    self.cursor_position -= 1
-            elif event.key == pygame.K_RIGHT:
-                if self.cursor_position < len(self.text):
-                    self.cursor_position += 1
+            if event.key == pygame.K_RETURN:
+                print(f"{self.name}: {self.text}")
+            elif event.key == pygame.K_BACKSPACE:
+                self.text = self.text[:-1]
             else:
-                self.text = self.text[:self.cursor_position] + event.unicode + self.text[self.cursor_position:]
-                self.cursor_position += 1
-    
+                self.text += event.unicode
+
     def update(self):
-        width = max(100, base_font.size(self.text)[0] + 20)
+        text_surface = base_font.render(self.text or self.placeholder, True, (200, 0, 0) if self.text else (180, 180, 180))
+        width = max(100, text_surface.get_width() + 10)
         self.rect.w = width
-        self.cursor_counter += 1
-        if self.cursor_counter >= 30:
-            self.cursor_counter = 0
-            self.cursor_visible = not self.cursor_visible
-    
+
     def draw(self, screen):
-        text_surface = base_font.render(self.text, True, (255, 0, 0))
+        # Render placeholder in gray if empty
+        text_surface = base_font.render(self.text if self.text else self.placeholder, True,
+                                        (255, 0, 0) if self.text else (150, 150, 150))
         screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
         pygame.draw.rect(screen, self.color, self.rect, 2)
-        
-        if self.active and self.cursor_visible:
-            cursor_x = base_font.size(self.text[:self.cursor_position])[0] + self.rect.x + 5
-            cursor_y = self.rect.y + 5
-            cursor_height = base_font.get_height()
-            pygame.draw.line(screen, (0, 0, 0), (cursor_x, cursor_y), (cursor_x, cursor_y + cursor_height))
 
-# Input boxes (x, y, w, h, text, name)
+
+# Input boxes (x, y, w, h, placeholder, name)
 input_boxes = [
     InputBox(100, 100, 140, 40, "Home Team", "Home"),
     InputBox(100, 200, 140, 40, "Away Team", "Away"),
@@ -104,22 +86,12 @@ input_boxes = [
 # Defines actions for buttons
 def pick_home_colour():
     global current_picker_target, colour_picker
-    colour_picker = pygame_gui.windows.UIColourPickerDialog(
-        pygame.Rect(160, 50, 420, 400),
-        ui_manager,
-        window_title="Pick Home Team Colour",
-        initial_colour=home_team_colour
-    )
+    colour_picker = pygame_gui.windows.UIColourPickerDialog(pygame.Rect(160, 50, 420, 400),ui_manager,window_title="Pick Home Team Colour",initial_colour=home_team_colour    )
     current_picker_target = "home"
 
 def pick_away_colour():
     global current_picker_target, colour_picker
-    colour_picker = pygame_gui.windows.UIColourPickerDialog(
-        pygame.Rect(160, 50, 420, 400),
-        ui_manager,
-        window_title="Pick Away Team Colour",
-        initial_colour=away_team_colour
-    )
+    colour_picker = pygame_gui.windows.UIColourPickerDialog(pygame.Rect(160, 50, 420, 400),ui_manager,window_title="Pick Away Team Colour",initial_colour=away_team_colour)
     current_picker_target = "away"
 
 
