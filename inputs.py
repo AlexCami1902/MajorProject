@@ -46,32 +46,59 @@ class InputBox:
         self.placeholder = placeholder
         self.name = name
         self.active = False
+        self.cursor_visible = True
+        self.cursor_counter = 0
+        self.cursor_position = 0
 
     def handle_event(self, event):
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if self.rect.collidepoint(event.pos):
-                self.active = True
-            else:
-                self.active = False
+            self.active = self.rect.collidepoint(event.pos)
             self.color = self.color_active if self.active else self.color_passive
 
-        if event.type == pygame.KEYDOWN and self.active:
+        if self.active and event.type == pygame.KEYDOWN:
             if event.key == pygame.K_RETURN:
                 print(f"{self.name}: {self.text}")
             elif event.key == pygame.K_BACKSPACE:
-                self.text = self.text[:-1]
+                if self.cursor_position > 0:
+                    self.text = self.text[:self.cursor_position - 1] + self.text[self.cursor_position:]
+                    self.cursor_position -= 1
+            elif event.key == pygame.K_LEFT:
+                self.cursor_position = max(0, self.cursor_position - 1)
+            elif event.key == pygame.K_RIGHT:
+                self.cursor_position = min(len(self.text), self.cursor_position + 1)
             else:
-                self.text += event.unicode
+                self.text = self.text[:self.cursor_position] + event.unicode + self.text[self.cursor_position:]
+                self.cursor_position += 1
 
     def update(self):
+        # Update blinking cursor
+        if self.active:
+            self.cursor_counter += 1
+            if self.cursor_counter >= 30:
+                self.cursor_counter = 0
+                self.cursor_visible = not self.cursor_visible
+        else:
+            self.cursor_visible = False
+            self.cursor_counter = 0
+
+        # Width adapt to text
         text_surface = base_font.render(self.text or self.placeholder, True, (200, 0, 0) if self.text else (180, 180, 180))
-        width = max(100, text_surface.get_width() + 10)
+        width = max(140, text_surface.get_width() + 10)
         self.rect.w = width
 
     def draw(self, screen):
-        # Render placeholder in gray if empty
-        text_surface = base_font.render(self.text if self.text else self.placeholder, True, (255, 0, 0) if self.text else (150, 150, 150))
+        display_text = self.text if self.text else self.placeholder
+        text_color = (255, 0, 0) if self.text else (150, 150, 150)
+        text_surface = base_font.render(display_text, True, text_color)
         screen.blit(text_surface, (self.rect.x + 5, self.rect.y + 5))
+
+        # Draw cursor (ChatGPT)
+        if self.active and self.cursor_visible:
+            cursor_x = self.rect.x + 5 + base_font.size(self.text[:self.cursor_position])[0]
+            cursor_y = self.rect.y + 5
+            cursor_height = base_font.get_height()
+            pygame.draw.line(screen, black, (cursor_x, cursor_y), (cursor_x, cursor_y + cursor_height), 2)
+        #ChatGPT End
         pygame.draw.rect(screen, self.color, self.rect, 2)
 
 
