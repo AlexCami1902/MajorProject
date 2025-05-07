@@ -102,6 +102,10 @@ def byes():
 def wide():
     global runs
     global extras
+    global bye_status
+    global noball_status
+    bye_status = False # Sets the bye status to false to let the code know to trigger the various events
+    noball_status = False # Sets the no-ball status to false to let the code know to trigger the various events
     runs += 1
     extras += 1
 
@@ -110,6 +114,8 @@ def noball():
     global overs
     global extras
     global noball_status
+    global bye_status
+    bye_status = False # Sets the bye status to false to let the code know to trigger the various events
     noball_status = True # Sets the no-ball status to true to let the code know to trigger the various events
     runs += 1
     extras += 1
@@ -150,6 +156,10 @@ def scoring(ballscore):
 
 def add_wicket():
     global wickets
+    global bye_status
+    global noball_status
+    bye_status = False # Sets the bye status to false to let the code know to trigger the various events
+    noball_status = False # Sets the no-ball status to false to let the code know to trigger the various events
     if wickets < 10:
         history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before making any changes
         wickets += 1
@@ -159,7 +169,10 @@ def add_wicket():
         
 def add_ball():
     global overs, runs, wickets, extras
-
+    global bye_status
+    global noball_status
+    bye_status = False # Sets the bye status to false to let the code know to trigger the various events
+    noball_status = False # Sets the no-ball status to false to let the code know to trigger the various events
     history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Appends the history list for the undo fucntion with the new ball
 
     if overs % 1 == 0.5: # Uses the modulous operator to figure out the remainder of the overs
@@ -324,6 +337,7 @@ while True:
 
     if bye_status:
         draw_text("How many byes?", font, red, screen, 200, 50) # Asks the user how many byes were scored
+            
 
     
     draw_text(f"Run Rate: {round(run_rate, 2)}", font, black, screen, 50, 700) # Print the various calculations made
