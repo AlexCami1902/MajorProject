@@ -146,7 +146,6 @@ def end_game():
     pygame.quit()
 
 def scoring(ballscore):
-    print("Button clicked")
     global runs
     global bye_status
     global extras
@@ -295,6 +294,9 @@ bold_enabled = False
 
 while True:
     # If it's the second innings, set the required score to the runs scored by team 1 then add 1 to win
+    if overs == 20:
+        read_score()
+
     if overs < 1:
         run_rate = 0
     else:
@@ -302,7 +304,10 @@ while True:
         if run_rate > 36:
             run_rate = 36
     if overs % 1 == 0:
-        predicted = (run_rate * (20 - numpy.round(overs, 1)))+runs # Calculates the projected total at the end of every over
+        if run_rate >= 36:
+            run_rate = 36
+        else:
+            predicted = (run_rate * (20 - numpy.round(overs, 1)))+runs # Calculates the projected total at the end of every over
     
     final_score = state["last"]
     if innings == 2:
