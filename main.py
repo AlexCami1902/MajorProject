@@ -40,19 +40,21 @@ if random_outcome == 1:
 elif random_outcome == 2:
     innings1 = 2
 
+
+# Sets up the display for Pygame as well as getting the dimensions of the display to go fullscreen
 screen = pygame.display.set_mode()
 screen_surface = pygame.display.get_surface()
 x = screen_surface.get_width()
 y = screen_surface.get_height()
 
-screen = pygame.display.set_mode((x, y))
+screen = pygame.display.set_mode((x, y)) #Fullscreen
 
 
 inningschange = True
 # Set up font
 font_regular = pygame.font.Font("fonts/PublicSans-Bold.ttf", 24)
-font_bold = pygame.font.Font("fonts/PublicSans-Black.ttf", 24)
-font = font_regular  # Start with regular
+font_bold = pygame.font.Font("fonts/PublicSans-Black.ttf", 30)
+font = font_regular  # Start with regular rather than bold
 
 # Game variables
 runs = 0
@@ -72,20 +74,24 @@ def draw_text(text, font, colour, surface, x, y):
 
 # Button class
 class Button:
+    HOVER_COLOUR = (200, 200, 200)  # Sets the colour for all buttons when they are hovered over
+
     def __init__(self, text, x, y, w, h, colour, action=None):
         self.text = text
         self.rect = pygame.Rect(x, y, w, h)
-        self.colour = colour
+        self.default_colour = colour
         self.action = action
 
-    def draw(self, screen):
-        pygame.draw.rect(screen, self.colour, self.rect)
+    def draw(self, screen): # Function to draw all of the buttons including the hover over colour
+        mouse_pos = pygame.mouse.get_pos()
+        draw_colour = Button.HOVER_COLOUR if self.rect.collidepoint(mouse_pos) else self.default_colour
+        pygame.draw.rect(screen, draw_colour, self.rect)
         draw_text(self.text, font, white, screen, self.rect.x + 10, self.rect.y + 10)
 
-    def is_clicked(self, pos):
+    def is_clicked(self, pos): # If the button is clicked
         return self.rect.collidepoint(pos)
 
-    def handle_event(self, event):
+    def handle_event(self, event): # What to do when the button is clicked
         if event.type == pygame.MOUSEBUTTONDOWN:
             if self.is_clicked(event.pos):
                 if self.action:
