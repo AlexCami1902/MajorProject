@@ -263,7 +263,8 @@ def read_score(): # The following code was modified by ChatGPT (See notes) as it
     start_innings()
 
 def toggle_bold(): # Function to toggle between regular and bold font
-    global font, bold_enabled
+    global font
+    global bold_enabled
     bold_enabled = not bold_enabled
     if bold_enabled:
         font = font_bold
@@ -280,7 +281,6 @@ buttons = [ # (text, x, y, w, h, colour, action=None)
     Button("5", 250, 200, 40, 50, homecolour, lambda: scoring(5)),
     Button("6", 300, 200, 40, 50, homecolour, lambda: scoring(6)),
     Button("0", 350, 200, 40, 50, homecolour, add_ball),
-    Button("Wicket", 200, 300, 100, 50, awaycolour, add_wicket),
     Button("N.B.",310, 300, 75, 50, awaycolour, noball),
     Button("Wide",395,300,90,50,awaycolour,wide),
     Button("Bye",495,300,90,50,awaycolour,byes),
@@ -289,13 +289,20 @@ buttons = [ # (text, x, y, w, h, colour, action=None)
     Button("Bold", 50, 400, 80, 50, black, toggle_bold)
 ]
 
-# Main game loop
 bold_enabled = False
+
+# Main game loop
+
 
 while True:
     # If it's the second innings, set the required score to the runs scored by team 1 then add 1 to win
     if overs == 20:
         read_score()
+
+    if bold_enabled == True: # Testing revealed that when the bold function is enabled the Wicket bututon would not display fully, this aims to fix this issue.
+        WicketButton = Button("Wicket", 150, 300, 150, 50, awaycolour, add_wicket)
+    elif bold_enabled == False:
+        WicketButton = Button("Wicket", 200, 300, 100, 50, awaycolour, add_wicket)
 
     if overs < 1:
         run_rate = 0
@@ -378,6 +385,7 @@ while True:
     # Draw buttons
     for button in buttons:
         button.draw(screen)
+        WicketButton.draw(screen)
 
     # Update display
     pygame.display.update()
