@@ -372,12 +372,17 @@ while True:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             noball_status = False
             # Check if buttons are clicked
+            WicketButton.handle_event(event)
             for button in buttons:
                 button.handle_event(event)
 
     # Draw the score display
     draw_text(f"Runs: {runs}", font, black, screen, 50, 0)
     draw_text(f"Innings: {innings}", font, black, screen, 1000, 0)
+    if innings == 1:
+        draw_text(f"{shared.first_batting_team}'s Innings", font, black, screen, 1000, 50)
+    elif innings == 2:
+        draw_text(f"{shared.second_batting_team}'s Innings", font, black, screen, 1000, 50)
     draw_text(f"Wickets: {wickets}", font, black, screen, 50, 50)
     draw_text(f"Overs: {overs}", font, black, screen, 50, 100)
     draw_text(f"Extras: {extras}", font, black, screen, 50, 150)
