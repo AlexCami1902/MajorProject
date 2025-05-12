@@ -121,12 +121,15 @@ def pick_away_colour():
     current_picker_target = "away"
 
 
-def submit_form():
+def submit_form():    
     home_team = input_boxes[0].text
     away_team = input_boxes[1].text
     match_location = input_boxes[2].text
-    varpass(home_team, away_team, match_location)
-    import main
+    if home_team == "" or away_team == "" or match_location == "":
+        return
+    else:
+        varpass(home_team, away_team, match_location)
+        import main
 
 # Function to draw text
 def draw_text(text, font, colour, surface, x, y):
