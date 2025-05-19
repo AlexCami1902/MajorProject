@@ -1,11 +1,11 @@
-import pygame
+import pygame # Install required libs
 import sys
 import pygame_gui
 import shared
 import random
 import time
 
-# Initialize Pygame
+# Set up pygame
 pygame.init()
 screen_width, screen_height = 600, 500
 screen = pygame.display.set_mode((screen_width, screen_height))
@@ -14,21 +14,12 @@ pygame.display.set_caption("Team Input and Colour Picker")
 clock = pygame.time.Clock()
 ui_manager = pygame_gui.UIManager((screen_width, screen_height))
 
-# Colours
-white = (255, 255, 255)
-black = (0, 0, 0)
-red = (255, 0, 0)
-
 # Fonts
-try:
-    font = pygame.font.Font("fonts/PublicSans-Bold.ttf", 24)
-except:
-    font = pygame.font.SysFont("arial", 24)
-    print("⚠️ Font not found, using system font.")
+font = pygame.font.Font("fonts/PublicSans-Bold.ttf", 24)
 
 # Team colours (set elsewhere)
-home_team_colour = pygame.Color(0, 0, 0)
-away_team_colour = pygame.Color(0, 0, 0)
+home_team_colour = shared.home_team_colour
+away_team_colour = shared.away_team_colour
 
 # Text rendering helper
 def draw_text(text, font, colour, surface, x, y):
@@ -47,7 +38,7 @@ class Button:
 
     def draw(self, screen):
         pygame.draw.rect(screen, self.colour, self.rect)
-        draw_text(self.text, font, white, screen, self.rect.x + 10, self.rect.y + 10)
+        draw_text(self.text, font, pygame.Color("azure"), screen, self.rect.x + 10, self.rect.y + 10)
 
     def is_clicked(self, pos):
         return self.rect.collidepoint(pos)
@@ -65,14 +56,14 @@ def cointossoutcome():
     if coinresult == "Heads":
         shared.first_batting_team = shared.home_team
         shared.second_batting_team = shared.away_team
-        draw_text(f"{shared.home_team} won the toss", font, red, screen, 50, 100)
+        draw_text(f"{shared.home_team} won the toss", font, pygame.Color("orangered1"), screen, 50, 100)
         pygame.display.flip()
         time.sleep(1)
 
     else:
         shared.first_batting_team = shared.away_team
         shared.second_batting_team = shared.home_team
-        draw_text(f"{shared.away_team} won the toss", font, red, screen, 50, 100)
+        draw_text(f"{shared.away_team} won the toss", font, pygame.Color("orangered1"), screen, 50, 100)
         pygame.display.flip()
         time.sleep(1)
 
@@ -98,8 +89,8 @@ while running:
 
     ui_manager.update(time_delta)
 
-    screen.fill(black)
-    draw_text("Away team calls the toss", font, red, screen, 50, 50)
+    screen.fill(pygame.Color("gray1"))
+    draw_text("Away team calls the toss", font, pygame.Color("orangered1"), screen, 50, 50)
     heads.draw(screen)
     tails.draw(screen)
     ui_manager.draw_ui(screen)
