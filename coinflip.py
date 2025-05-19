@@ -9,7 +9,7 @@ import time
 pygame.init()
 screen_width, screen_height = 600, 500
 screen = pygame.display.set_mode((screen_width, screen_height))
-pygame.display.set_caption("Team Input and Colour Picker")
+pygame.display.set_caption("Coin Toss")
 
 clock = pygame.time.Clock()
 ui_manager = pygame_gui.UIManager((screen_width, screen_height))
