@@ -20,7 +20,7 @@ red = (255, 0, 0)
 
 # Temporary smaller screen for UI (adjust as needed)
 screen = pygame.display.set_mode([600, 500])
-pygame.display.set_caption("Team Input and Colour Picker")
+pygame.display.set_caption("Coin Toss")
 
 clock = pygame.time.Clock()
 base_font = pygame.font.Font("fonts/PublicSans-Bold.ttf", 24)
@@ -129,7 +129,7 @@ def submit_form():
         return
     else:
         varpass(home_team, away_team, match_location)
-        import main
+        import coinflip
 
 # Function to draw text
 def draw_text(text, font, colour, surface, x, y):
