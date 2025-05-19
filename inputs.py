@@ -20,7 +20,7 @@ red = (255, 0, 0)
 
 # Temporary smaller screen for UI (adjust as needed)
 screen = pygame.display.set_mode([600, 500])
-pygame.display.set_caption("Coin Toss")
+pygame.display.set_caption("Team Selector & Colour Picker")
 
 clock = pygame.time.Clock()
 base_font = pygame.font.Font("fonts/PublicSans-Bold.ttf", 24)
