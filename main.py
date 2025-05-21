@@ -141,6 +141,7 @@ def start_innings():
     wickets = 0
     overs = 0.0    
     innings += 1
+    storage = {"Ball": "Score"}
 
 def end_game():
     pygame.quit()
