@@ -56,16 +56,16 @@ def cointossoutcome():
     if coinresult == "Heads":
         shared.first_batting_team = shared.home_team
         shared.second_batting_team = shared.away_team
-        draw_text(f"{shared.home_team} won the toss", font, pygame.Color("orangered1"), screen, 50, 100)
+        draw_text(f"{shared.home_team} won the toss \n {shared.home_team} are batting first", font, pygame.Color("orangered1"), screen, 50, 100)
         pygame.display.flip()
-        time.sleep(1)
+        time.sleep(5)
 
     else:
         shared.first_batting_team = shared.away_team
         shared.second_batting_team = shared.home_team
-        draw_text(f"{shared.away_team} won the toss", font, pygame.Color("orangered1"), screen, 50, 100)
+        draw_text(f"{shared.away_team} won the toss \n {shared.away_team} are batting first", font, pygame.Color("orangered1"), screen, 50, 100)
         pygame.display.flip()
-        time.sleep(1)
+        time.sleep(5)
 
     # Import main to continue (assuming main.py handles the switch)
     import main
@@ -90,7 +90,7 @@ while running:
     ui_manager.update(time_delta)
 
     screen.fill(pygame.Color("gray1"))
-    draw_text("Away team calls the toss", font, pygame.Color("orangered1"), screen, 50, 50)
+    draw_text(f"{shared.away_team} calls the toss", font, pygame.Color("orangered1"), screen, 50, 50)
     heads.draw(screen)
     tails.draw(screen)
     ui_manager.draw_ui(screen)
