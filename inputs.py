@@ -3,6 +3,7 @@ import sys
 import pygame_gui
 import shared
 import random
+import time
 
 pygame.init()
 
@@ -125,7 +126,20 @@ def submit_form():
     home_team = input_boxes[0].text
     away_team = input_boxes[1].text
     match_location = input_boxes[2].text
-    if home_team == "" or away_team == "" or match_location == "":
+    if home_team == "":
+        draw_text("Please enter a home team name.", font, red, screen, 100, 450)
+        pygame.display.flip()
+        time.sleep(1)
+        return
+    elif away_team == "":
+        draw_text("Please enter an away team name.", font, red, screen, 100, 450)
+        pygame.display.flip()
+        time.sleep(1)
+        return
+    elif match_location == "":
+        draw_text("Please enter a match location.", font, red, screen, 100, 450)
+        pygame.display.flip()
+        time.sleep(1)
         return
     else:
         varpass(home_team, away_team, match_location)
