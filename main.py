@@ -143,6 +143,7 @@ def start_innings():
     innings += 1
     inningschange = True
     storage = {"Ball": "Score"}
+    history.clear()  # Clear the history for the new innings
 
 def end_game():
     pygame.quit()
@@ -203,6 +204,7 @@ def undo():
                 runs = prev_runs      # Remove the extra from the total runs
                 noball_status = prev_noball
                 bye_status = prev_bye
+                wickets = prev_wickets  # Reset the wickets to the previous state
                 print(f"Undo (extra): Extras={extras}, Runs={runs}")  # Debugging output REMOVE BEFORE SUBMISSION
             else:
                 # Otherwise, undo everything (normal ball case)
@@ -275,19 +277,17 @@ def toggle_bold(): # Function to toggle between regular and bold font
 
 # Create buttons for the various actions using the Button class created earlier
 
-buttons = [ # (text, x, y, w, h, colour, action=None)
+buttons1 = [ # (text, x, y, w, h, colour, action=None)
     Button("1", 50, 200, 40, 50, homecolour, lambda: scoring(1)),
     Button("2", 100, 200, 40, 50, homecolour, lambda: scoring(2)),
     Button("3", 150, 200, 40, 50, homecolour, lambda: scoring(3)),
     Button("4", 200, 200, 40, 50, homecolour, lambda: scoring(4)),
     Button("5", 250, 200, 40, 50, homecolour, lambda: scoring(5)),
     Button("6", 300, 200, 40, 50, homecolour, lambda: scoring(6)),
-    Button("0", 350, 200, 40, 50, homecolour, add_ball),
-    Button("N.B.",310, 300, 75, 50, awaycolour, noball),
-    Button("Wide",395,300,90,50,awaycolour,wide),
-    Button("Bye",495,300,90,50,awaycolour,byes),
-    Button("Undo", 595, 300, 90, 50, awaycolour, undo),
-    Button("Fudge Runs", 695, 300, 180, 50, awaycolour, wide),
+    Button(".", 350, 200, 40, 50, homecolour, add_ball),
+    Button("Wide",410,300,90,50,awaycolour,wide),
+    Button("Bye",510,300,90,50,awaycolour,byes),
+    Button("Undo", 610, 300, 90, 50, awaycolour, undo),
     Button("Bold", 50, 400, 80, 50, black, toggle_bold)
 ]
 
@@ -302,10 +302,17 @@ while True:
         read_score()
 
     if bold_enabled == True: # Testing revealed that when the bold function is enabled the Wicket bututon would not display fully, this aims to fix this issue.
-        WicketButton = Button("Wicket", 150, 300, 150, 50, awaycolour, add_wicket)
+        buttons2 = [ # (text, x, y, w, h, colour, action=None)
+                Button("Wicket", 50, 300, 150, 50, awaycolour, add_wicket),
+                Button("No Ball", 250, 300, 150, 50, awaycolour, noball),
+                Button("Adjustments", 710, 300, 200, 50, awaycolour, wide)
+        ]
     elif bold_enabled == False:
-        WicketButton = Button("Wicket", 200, 300, 100, 50, awaycolour, add_wicket)
-
+        buttons2 = [ # (text, x, y, w, h, colour, action=None)
+                Button("Wicket", 50, 300, 100, 50, awaycolour, add_wicket),
+                Button("No Ball", 300, 300, 100, 50, awaycolour, noball),
+                Button("Adjustments", 710, 300, 180, 50, awaycolour, wide)
+        ]
     if overs < 1:
         run_rate = 0
     else:
@@ -324,20 +331,32 @@ while True:
 
     if innings == 1:
         if innings1 == 1:
-            pygame.display.set_caption(f"{shared.home_team}'s Innings")
+            if shared.first_batting_team.endswith("s"):
+                pygame.display.set_caption(f"{shared.first_batting_team}' Innings")
+            else:
+                pygame.display.set_caption(f"{shared.first_batting_team}'s Innings")
             innings2 = 1
             shared.first_batting_team = shared.home_team
             shared.second_batting_team = shared.away_team
         elif innings1 == 2:
-            pygame.display.set_caption(f"{shared.away_team}'s Innings")
+            if shared.first_batting_team.endswith("s"):
+                pygame.display.set_caption(f"{shared.first_batting_team}' Innings")
+            else:
+                pygame.display.set_caption(f"{shared.first_batting_team}'s Innings")
             innings2 = 2
             shared.first_batting_team = shared.away_team
             shared.second_batting_team = shared.home_team
     elif innings == 2:
         if innings2 == 1:
-            pygame.display.set_caption(f"{shared.away_team}'s Innings")
+            if shared.second_batting_team.endswith("s"):
+                pygame.display.set_caption(f"{shared.second_batting_team}' Innings")
+            else:
+                pygame.display.set_caption(f"{shared.second_batting_team}'s Innings")
         elif innings2 == 2:
-            pygame.display.set_caption(f"{shared.home_team}'s Innings")
+            if shared.second_batting_team.endswith("s"):
+                pygame.display.set_caption(f"{shared.second_batting_team}' Innings")
+            else:
+                pygame.display.set_caption(f"{shared.second_batting_team}'s Innings")
 
         
     if innings > 2:
@@ -351,9 +370,10 @@ while True:
                 f.write(f"{state['first_innings_score']},{runs}")
             time.sleep(.5)
             result()
+        draw_text(f"Required Runs: {final_score}", font, black, screen, 50, 500)
 
     if noball_status:
-        draw_text("Batter can only be out run out, hitting the ball twice or obstructing the field", font, red, screen, 200, 50) # Prints a warning about the quirks of a noball
+        draw_text("Batter can only be out run out, hitting the ball twice or obstructing the field", font, red, screen, 200, 500) # Prints a warning about the quirks of a noball
 
     if bye_status:
         draw_text("How many byes?", font, red, screen, 200, 50) # Asks the user how many byes were scored
@@ -364,8 +384,6 @@ while True:
     
     draw_text(f"Predicted Score: {round(predicted, 0)}", font, black, screen, 50, 600)
 
-    draw_text(f"Required: {final_score}", font, black, screen, 50, 500)
-
     # Event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -374,25 +392,35 @@ while True:
         elif event.type == pygame.MOUSEBUTTONDOWN:
             noball_status = False
             # Check if buttons are clicked
-            WicketButton.handle_event(event)
-            for button in buttons:
+            for button in buttons1:
+                button.handle_event(event)
+            for button in buttons2:
                 button.handle_event(event)
 
     # Draw the score display
     draw_text(f"Runs: {runs}", font, black, screen, 50, 0)
     draw_text(f"Innings: {innings}", font, black, screen, 1000, 0)
     if innings == 1:
-        draw_text(f"{shared.first_batting_team}'s Innings", font, black, screen, 1000, 50)
+        if shared.first_batting_team.endswith("s"):
+            personifiedname = f"{shared.first_batting_team}' Innings"
+        else:
+            personifiedname = f"{shared.first_batting_team}'s Innings"
+        draw_text(f"{personifiedname}", font, black, screen, 1000, 50)
     elif innings == 2:
-        draw_text(f"{shared.second_batting_team}'s Innings", font, black, screen, 1000, 50)
+        if shared.second_batting_team.endswith("s"):
+            personifiedname = f"{shared.second_batting_team}' Innings"
+        else:
+            personifiedname = f"{shared.second_batting_team}'s Innings"
+        draw_text(f"{personifiedname}", font, black, screen, 1000, 50)
     draw_text(f"Wickets: {wickets}", font, black, screen, 50, 50)
     draw_text(f"Overs: {overs}", font, black, screen, 50, 100)
     draw_text(f"Extras: {extras}", font, black, screen, 50, 150)
 
     # Draw buttons
-    for button in buttons:
+    for button in buttons1:
         button.draw(screen)
-        WicketButton.draw(screen)
+    for button in buttons2:
+        button.draw(screen)
 
     # Update display
     pygame.display.update()
