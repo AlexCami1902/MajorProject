@@ -34,10 +34,6 @@ jobs:
       # - name: Run tests
       #   run: |
       #     python -m unittest discover tests/
-      - name: Run tests
-        run: |
-          python -m unittest discover tests/
-      
       
       # Step 5: Deploy your app (if applicable)
       # Add your deployment steps here if needed, for example, uploading files to a server
