@@ -6,15 +6,17 @@ import os
 import random
 import numpy
 import shared # Import the shared.py file to access the shared variables
+from datetime import datetime
 from shared import home_team_colour, away_team_colour
 
 pygame.init() # Initialize pygame
 state = {"last": None}
+
 print(f"Received Data -> Home: {shared.home_team}, Away: {shared.away_team}, Location: {shared.match_location}") # Testing reciept of score
 state["first_innings_score"] = 0 # Make the scores zero by default at the start of the game
 state["second_innings_score"] = 0 
 history = []  # Stores (overs, runs, wickets, extras) in that format for undo function later on
-
+StartTime = datetime.now().strftime('%H:%M') # Gets the current time to display on the screen
 # Set default colours to refer to later on
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -125,25 +127,25 @@ def noball():
     noball_status = True # Sets the no-ball status to true to let the code know to trigger the various events
     runs += 1
     extras += 1
-    
+
 def start_innings():
     global extras
-    global wickets
+    global runs
     global overs
     global innings
-    global required
-    global runs
     global inningschange
-
-    # Sets the scores to 0
-    extras = 0
-    runs = 0
-    wickets = 0
-    overs = 0.0    
-    innings += 1
-    inningschange = True
-    storage = {"Ball": "Score"}
+    global storage
+    global history
+    global wickets
+    extras = 0 # Resets the extras to 0
+    runs = 0 # Resets the runs to 0
+    wickets = 0 # Resets the wickets to 0
+    overs = 0.0 # Resets the overs to 0.0
+    innings += 1 # Increments the innings by 1
+    inningschange = True # Sets the innings change to true so that the code knows to change the teams batting and bowling
+    storage = {"Ball": "Score"} # Resets the storage dictionary for the new innings
     history.clear()  # Clear the history for the new innings
+        
 
 def end_game():
     pygame.quit()
@@ -376,7 +378,7 @@ while True:
         draw_text("Batter can only be out run out, hitting the ball twice or obstructing the field", font, red, screen, 200, 500) # Prints a warning about the quirks of a noball
 
     if bye_status:
-        draw_text("How many byes?", font, red, screen, 200, 50) # Asks the user how many byes were scored
+        draw_text("How many byes?", font, red, screen, 200, 500) # Asks the user how many byes were scored
             
 
     
@@ -397,6 +399,10 @@ while True:
             for button in buttons2:
                 button.handle_event(event)
 
+    # Time Display
+    current_time = datetime.now().strftime('%H:%M')
+    draw_text(f"Current Time: {current_time}", font, black, screen, 1000, 150)
+    draw_text(f"Start Time: {StartTime}", font, black, screen, 1000, 100)
     # Draw the score display
     draw_text(f"Runs: {runs}", font, black, screen, 50, 0)
     draw_text(f"Innings: {innings}", font, black, screen, 1000, 0)
