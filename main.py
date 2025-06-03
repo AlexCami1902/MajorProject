@@ -16,7 +16,7 @@ print(f"Received Data -> Home: {shared.home_team}, Away: {shared.away_team}, Loc
 state["first_innings_score"] = 0 # Make the scores zero by default at the start of the game
 state["second_innings_score"] = 0 
 history = []  # Stores (overs, runs, wickets, extras) in that format for undo function later on
-StartTime = datetime.now().strftime('%H:%M') # Gets the current time to display on the screen
+StartTime = datetime.now() # Gets the current time to display on the screen
 # Set default colours to refer to later on
 white = (255, 255, 255)
 black = (0, 0, 0)
@@ -400,9 +400,18 @@ while True:
                 button.handle_event(event)
 
     # Time Display
-    current_time = datetime.now().strftime('%H:%M')
-    draw_text(f"Current Time: {current_time}", font, black, screen, 1000, 150)
-    draw_text(f"Start Time: {StartTime}", font, black, screen, 1000, 100)
+    current_time = datetime.now()
+    duration_td = current_time - StartTime
+    duration_hours = duration_td.seconds // 3600 # As duration is a 'time delta' in python (A difference between 2 values) it needs to be formatted apropriately, the following lines do just this
+    duration_minutes = (duration_td.seconds % 3600) // 60
+    duration_seconds = duration_td.seconds % 60
+    duration_str = f"{duration_hours:02}:{duration_minutes:02}:{duration_seconds:02}"
+    StartTime_string = StartTime.strftime('%H:%M')  # Format the start time for display
+    current_time_string = current_time.strftime('%H:%M')  # Format the current time for display
+    draw_text(f"Duration: {duration_str}", font, black, screen, 1000, 200)
+    draw_text(f"Current Time: {current_time_string}", font, black, screen, 1000, 150)
+    draw_text(f"Start Time: {StartTime_string}", font, black, screen, 1000, 100)
+
     # Draw the score display
     draw_text(f"Runs: {runs}", font, black, screen, 50, 0)
     draw_text(f"Innings: {innings}", font, black, screen, 1000, 0)
