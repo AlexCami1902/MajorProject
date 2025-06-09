@@ -12,7 +12,6 @@ from shared import home_team_colour, away_team_colour
 pygame.init() # Initialize pygame
 state = {"last": None} # This sets the state of the game's dictionaty, this is used to store the last score of the game
 
-print(f"Received Data -> Home: {shared.home_team}, Away: {shared.away_team}, Location: {shared.match_location}") # Testing reciept of score from the shared.py file
 state["first_innings_score"] = 0 # Make the scores zero by default at the start of the game
 state["second_innings_score"] = 0 
 history = []  # Stores (overs, runs, wickets, extras) in that format for undo function later on
@@ -34,13 +33,7 @@ noball_status = False # Sets the no-ball status to false by default, this is use
 bye_status = False # Sets the bye status to false by default, this is used to determine if a bye has been scored
 innings = 1 # Sets the innings to 1 by default, this is used to determine which innings is being played
 runs1 = 0 # Sets the runs for the first innings to 0 by default
-innings1 = 0 # Sets the innings for the first innings to 0 by default
 outcomes = [1, 2] # Set the possible outcomes for the first innings this simulates a coin flip as no one carrys a coin to games anymore
-random_outcome = random.choice(outcomes) # Randomly selects a team to bat first
-if random_outcome == 1:
-    innings1 = 1
-elif random_outcome == 2:
-    innings1 = 2
 
 
 # Sets up the display for Pygame as well as getting the dimensions of the display to go fullscreen
@@ -94,11 +87,11 @@ class Button:
     def is_clicked(self, pos): # If the button is clicked
         return self.rect.collidepoint(pos) # Checks if the mouse position is within the button's rectangle
 
-    def handle_event(self, event): # What to do when the button is clicked
-        if event.type == pygame.MOUSEBUTTONDOWN: # If the mouse button is pressed down
-            if self.is_clicked(event.pos): # Checks if the button is clicked
-                if self.action: # If the button has an action assigned to it
-                    self.action() # Calls the action associated with the button
+    def handle_event(self, event):                                  # What to do when the button is clicked
+        if event.type == pygame.MOUSEBUTTONDOWN:                    # If the mouse button is pressed down
+            if self.is_clicked(event.pos):                          # Checks if the button is clicked
+                if self.action:                                     # If the button has an action assigned to it
+                    self.action()                                   # Calls the action associated with the button
 # ----------------------------------------------------------------------------
 # Actions for the various buttons, to be implemented as part of the class later on
 
@@ -151,65 +144,68 @@ def start_innings(): # Function to start a new innings, this is used to reset th
 def end_game(): # When the game is over, this function is called to end the game
     pygame.quit() # Quits the pygame window
 
-def scoring(ballscore): # Function to add the score of the ball to the runs, this is used to add the score of the ball to the runs
-    global runs # Global runs, overs, wickets, extras, noball_status and bye_status
+def scoring(ballscore):                                                             # Function to add the score of the ball to the runs, this is used to add the score of the ball to the runs
+    global runs                                                                     # Global runs, overs, wickets, extras, noball_status and bye_status
     global bye_status
     global extras
-    int(ballscore) # Make the score for the ball an integer
-    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before changing
-    if bye_status == True:  # If the bye status is true, this means that the user has selected to add byes to the score
-        extras += ballscore # Adds the score of the ball to the extras
-        runs += ballscore # Adds the score of the ball to the runs
-        bye_status = False # Sets the bye status to false to let the code know to trigger the various events
-    else:  # If the bye status is false, this means that the user has not selected to add byes to the score
-        runs += ballscore # Adds the score of the ball to the runs
-    add_ball() # Calls the add_ball function to add a ball to the overs and update the score
+    ballscore = int(ballscore)                                                      # Make the score for the ball an integer
+    history.append((overs, runs, wickets, extras, noball_status, bye_status))       # Saves the current state of play before changing
+    if bye_status == True:                                                          # If the bye status is true, this means that the user has selected to add byes to the score
+        extras += ballscore                                                         # Adds the score of the ball to the extras
+        runs += ballscore                                                           # Adds the score of the ball to the runs
+        bye_status = False                                                          # Sets the bye status to false to let the code know to trigger the various events
+    else:                                                                           # If the bye status is false, this means that the user has not selected to add byes to the score
+        runs += ballscore                                                           # Adds the score of the ball to the runs
+    add_ball()                                                                      # Calls the add_ball function to add a ball to the overs and update the score
 
-def add_wicket(): # Function to add a wicket to the score, this is used to add a wicket to the score
-    global wickets # Global wickets, overs, runs, extras, noball_status and bye_status
+def add_wicket():                                                                   # Function to add a wicket to the score, this is used to add a wicket to the score
+    global wickets                                                                  # Global wickets, overs, runs, extras, noball_status and bye_status
     global bye_status
     global noball_status
-    bye_status = False # Sets the bye status to false to let the code know to trigger the various events
-    noball_status = False # Sets the no-ball status to false to let the code know to trigger the various events
-    if wickets < 10: # If the number of wickets is less than 10, this means that there are still wickets left to take
-        history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Saves the current state of play before making any changes
-        wickets += 1 # Adds 1 to the number of wickets
-        add_ball() # Calls the add_ball function to add a ball to the overs and update the score
-    elif wickets == 10: # If the number of wickets is 10, this means that there are no wickets left to take
-        read_score() # Calls the read_score function to end the innings and display the score
-        
+    bye_status = False                                                              # Sets the bye status to false to let the code know to trigger the various events
+    noball_status = False                                                           # Sets the no-ball status to false to let the code know to trigger the various events
+    if wickets < 10:                                                                # If the number of wickets is less than 10, this means that there are still wickets left to take
+        history.append((overs, runs, wickets, extras, noball_status, bye_status))   # Saves the current state of play before making any changes
+        wickets += 1                                                                # Adds 1 to the number of wickets
+        add_ball()                                                                  # Calls the add_ball function to add a ball to the overs and update the score
+    elif wickets == 10:                                                             # If the number of wickets is 10, this means that there are no wickets left to take
+        read_score()                                                                # Calls the read_score function to end the innings and display the score
+
 def add_ball():
     global overs, runs, wickets, extras
     global bye_status
     global noball_status
-    bye_status = False # Sets the bye status to false to let the code know to trigger the various events
-    noball_status = False # Sets the no-ball status to false to let the code know to trigger the various events
-    history.append((overs, runs, wickets, extras, noball_status, bye_status)) # Appends the history list for the undo fucntion with the new ball
-
-    if overs % 1 == 0.5: # Uses the modulous operator to figure out the remainder of the overs
-        overs += 0.5 # If the remainder is 0.5, it is the last ball of the over therefore, the code needs to add 0.5 to make it a new over
+    bye_status = False                                                              # Sets the bye status to false to let the code know to trigger the various events
+    noball_status = False                                                           # Sets the no-ball status to false to let the code know to trigger the various events
+    history.append((overs, runs, wickets, extras, noball_status, bye_status))       # Appends the history list for the undo function with the new ball
+    if overs % 1 == 0.5:                                                            # Uses the modulous operator to figure out the remainder of the overs
+        overs += 0.5                                                                # If the remainder is 0.5, it is the last ball of the over therefore, the code needs to add 0.5 to make it a new over
     else:
-        overs += 0.1
-    overs = round(overs, 1) # Round to 1 d.p. to correct for any very small errors in the division that can be multiplied and made larger
+        overs += 0.1                                                                # If the remainder is not 0.5, it is a normal ball, so add 0.1 to the overs
+    overs = round(overs, 1)                                                         # Round to 1 d.p. to correct for any very small errors in the division that can be multiplied and made larger
+    backup(overs, runs, wickets)                                                    # Send the results from this ball to the backup function
 
-    backup(overs, runs, wickets)  # Send the results from this ball to the backup function
-
-def undo():
-    global overs, runs, wickets, extras, noball_status, bye_status
+def undo():                                                                                             # Defines the undo function for the undo button
+    global overs # The following variables are all globaled to allow for the system to access them and compare them against the prev_VARIABLE
+    global runs
+    global wickets
+    global extras
+    global noball_status
+    global bye_status
 
     for i in range(2):
-        if history:  # Check that there is a pervious ball otherwise the function will not work
-            prev_overs, prev_runs, prev_wickets, prev_extras, prev_noball, prev_bye = history.pop() # Gets the state of everything as recoreded in the history list. (Runs, extras, noballs, byes etc.)
+        if history:                                                                                     # Check that there is a pervious ball to stop known error of the code going accross the innigns and causing many errors
+            prev_overs, prev_runs, prev_wickets, prev_extras, prev_noball, prev_bye = history.pop()     # Gets the state of everything as recoreded in the history list. (Runs, extras, noballs, byes etc.)
 
             # If the last action was a no-ball or wide, just remove the extra without undoing the ball count
             if overs == prev_overs:  
-                extras = prev_extras  # Remove the extra runs
-                runs = prev_runs      # Remove the extra from the total runs
+                extras = prev_extras                        # Remove the extra runs
+                runs = prev_runs                            # Remove the extra from the total runs
                 noball_status = prev_noball
                 bye_status = prev_bye
-                wickets = prev_wickets  # Reset the wickets to the previous state
+                wickets = prev_wickets                      # Reset the wickets to the previous state
             else:
-                # Otherwise, undo everything (normal ball case)
+            # Otherwise, undo everything (normal ball case)
                 overs, runs, wickets, extras, noball_status, bye_status = prev_overs, prev_runs, prev_wickets, prev_extras, prev_noball, prev_bye
 
 def result():
@@ -222,19 +218,19 @@ def result():
     except FileNotFoundError: # If the file is not found, print an error message
         print("result.py not found. Please ensure the file exists in the directory.") # Making sure that all files are accesible in the directory
 
-def backup(ball, runs, wicket): # Function to backup the score of the ball bowled, this is used to store the score of each ball bowled in the innings
-    score = f"{wicket}/{runs}" # The score is stored in the format of wickets/runs, this is used to display the score of each ball bowled in the innings
-    storage[ball] = score # The score is stored in the storage dictionary with the ball number as the key and the score as the value
-    make_a_csv() # Sends the backup of the file to the make_a_csv function to write the data to a .csv file
+def backup(ball, runs, wicket):             # Function to backup the score of the ball bowled, this is used to store the score of each ball bowled in the innings
+    score = f"{wicket}/{runs}"              # The score is stored in the format of wickets/runs, this is used to display the score of each ball bowled in the innings
+    storage[ball] = score                   # The score is stored in the storage dictionary with the ball number as the key and the score as the value
+    make_a_csv()                            # Sends the backup of the file to the make_a_csv function to write the data to a .csv file
 
-def make_a_csv(): # Function to make a .csv file of the scores, this is used to write the scores of each ball bowled in the innings to a .csv file
-    global innings # Global innings to determine which innings is being played
-    if innings == 1: # Make 2 different .csv files for each innings
-        with open('Innings1.csv', mode='w') as csvfile: # Open the .csv file for writing
-                fieldnames = ["Ball", "Score", f"Innings: {innings}"] # Set the column headers
-                writer = csv.DictWriter(csvfile, fieldnames=fieldnames) # Create a DictWriter object to write the data to the .csv file
-                writer.writeheader() # Write the headers 
-                writer.writerows([{"Ball": k, "Score": v} for k, v in storage.items()]) # Convert storage dictionary to a list of dictionaries
+def make_a_csv():                                                                           # Function to make a .csv file of the scores, this is used to write the scores of each ball bowled in the innings to a .csv file
+    global innings                                                                          # Global innings to determine which innings is being played
+    if innings == 1:                                                                        # Make 2 different .csv files for each innings
+        with open('Innings1.csv', mode='w') as csvfile:                                     # Open the .csv file for writing
+            fieldnames = ["Ball", "Score", f"Innings: {innings}"]                           # Set the column headers
+            writer = csv.DictWriter(csvfile, fieldnames=fieldnames)                         # Create a DictWriter object to write the data to the .csv file
+            writer.writeheader()                                                            # Write the headers
+            writer.writerows([{"Ball": k, "Score": v} for k, v in storage.items()])         # Convert storage dictionary to a list of dictionaries
     elif innings == 2:
         with open('Innings2.csv', mode='w') as csvfile:
                 fieldnames = ["Ball", "Score", f"Innings: {innings}"]
@@ -242,27 +238,27 @@ def make_a_csv(): # Function to make a .csv file of the scores, this is used to 
                 writer.writeheader()
                 writer.writerows([{"Ball": k, "Score": v} for k, v in storage.items()]) 
 
-def read_score(): # The following code was modified by ChatGPT (See notes) as it was broken and was fixed by splitting the dictioanry, the intrinsic documentation is my own based on my understanding of the code
-    # ChatGPT Modification Begins ***************
+def read_score():                                           # The following code was modified by ChatGPT (See notes) as it was broken and was fixed by splitting the dictioanry, the intrinsic documentation is my own based on my understanding of the code
+    # ****ChatGPT Modification Begins****
     global storage
     storage.pop('Ball', None)
 
     if storage:
-        # Get the last score entry for both innings
-        last_entry = storage[max(storage.keys())]  # Get value from the highest ball key
+        # Get the last score entry for both innings, every ball is stored with a key value pair where the ball is stored as Ball:Score with the ball as the key and the score as the value, this helps print to the csv
+        last_entry = storage[max(storage.keys())]           # Get value from the highest ball key
         last_score = int(last_entry.split('/')[1])
-        # ChatGPT Modification Ends *******************
-        print(f"Total Score: {last_score}") # Concatenates the last score to the string "Total Score: "
+    # ****ChatGPT Modification Ends****
+        print(f"Total Score: {last_score}")                 # Concatenates the last score to the string "Total Score: "
         
         if innings == 1:
-            state["first_innings_score"] = last_score # Set the innings score to the last score recorded by the system
+            state["first_innings_score"] = last_score       # Set the innings score to the last score recorded by the system
         elif innings == 2:
-            state["second_innings_score"] = last_score # Set the second innings score to the last score recorded by the system
+            state["second_innings_score"] = last_score      # Set the second innings score to the last score recorded by the system
             
         
         # Write the scores to a file so result.py can read them, this was the easiest way to transfer the scores accross the files.
-        with open("final_scores.txt", "w") as f: # Open the final_scores.txt file to write the scores
-            f.write(f"{state['first_innings_score']},{state['second_innings_score']}") # Write the scores to the file
+        with open("final_scores.txt", "w") as f:                                            # Open the final_scores.txt file to write the scores
+            f.write(f"{state['first_innings_score']},{state['second_innings_score']}")      # Write the scores to the file
 
     start_innings() # Resets the game for the next innings, this is used to reset the variables for a new innings
 
@@ -278,56 +274,53 @@ def toggle_bold(): # Function to toggle between regular and bold font
 # Create buttons for the various actions using the Button class created earlier
 
 buttons1 = [ # (text, x, y, w, h, colour, action=None)
-    Button("1", 50, 200, 40, 50, homecolour, lambda: scoring(1)), # Button for 1 run
-    Button("2", 100, 200, 40, 50, homecolour, lambda: scoring(2)), # Button for 2 runs
-    Button("3", 150, 200, 40, 50, homecolour, lambda: scoring(3)), # Button for 3 runs
-    Button("4", 200, 200, 40, 50, homecolour, lambda: scoring(4)), # Button for 4 runs
-    Button("5", 250, 200, 40, 50, homecolour, lambda: scoring(5)), # Button for 5 runs
-    Button("6", 300, 200, 40, 50, homecolour, lambda: scoring(6)), # Button for 6 runs
-    Button(".", 350, 200, 40, 50, homecolour, add_ball), # Button for a dot ball (no runs scored)
-    Button("Wide",410,300,90,50,awaycolour,wide), # Button for wides
-    Button("Bye",510,300,90,50,awaycolour,byes), # Button for byes
-    Button("Undo", 610, 300, 90, 50, awaycolour, undo), # Button to undo the last action
-    Button("Bold", 50, 400, 80, 50, black, toggle_bold) # Button to toggle between regular and bold font
+    Button("1", 50, 200, 40, 50, homecolour, lambda: scoring(1)),                       # Button for 1 run
+    Button("2", 100, 200, 40, 50, homecolour, lambda: scoring(2)),                      # Button for 2 runs
+    Button("3", 150, 200, 40, 50, homecolour, lambda: scoring(3)),                      # Button for 3 runs
+    Button("4", 200, 200, 40, 50, homecolour, lambda: scoring(4)),                      # Button for 4 runs
+    Button("5", 250, 200, 40, 50, homecolour, lambda: scoring(5)),                      # Button for 5 runs
+    Button("6", 300, 200, 40, 50, homecolour, lambda: scoring(6)),                      # Button for 6 runs
+    Button(".", 350, 200, 40, 50, homecolour, add_ball),                                # Button for a dot ball (no runs scored)
+    Button("Wide",410,300,90,50,awaycolour,wide),                                       # Button for wides
+    Button("Bye",510,300,90,50,awaycolour,byes),                                        # Button for byes
+    Button("Undo", 610, 300, 90, 50, awaycolour, undo),                                 # Button to undo the last action
+    Button("Bold", 50, 400, 80, 50, black, toggle_bold)                                 # Button to toggle between regular and bold font
 ]
 
-bold_enabled = False # Variable to determine if the bold font is enabled or not, this is used to toggle between regular and bold font
+bold_enabled = False # Variable to determine if the bold font is enabled or not, this is used to toggle between the regular and the bold font
 
 # Main game loop
-
-
 while True:
-    # If it's the second innings, set the required score to the runs scored by team 1 then add 1 to win
-    if overs == 20:
+    if overs == 20: # When the innings/game is completed start the read score function to commence calculations
         read_score()
-
     if bold_enabled == True: # Testing revealed that when the bold function is enabled the Wicket bututon would not display fully, this aims to fix this issue.
         buttons2 = [ # (text, x, y, w, h, colour, action=None)
-                Button("Wicket", 50, 300, 150, 50, awaycolour, add_wicket), # Button for wicket
-                Button("No Ball", 250, 300, 150, 50, awaycolour, noball), # Button for no ball
-                Button("Adjustments", 710, 300, 200, 50, awaycolour, wide) # Button for adjustments (wides, byes, etc.)
+                Button("Wicket", 50, 300, 150, 50, awaycolour, add_wicket),             # Button for wicket
+                Button("No Ball", 250, 300, 150, 50, awaycolour, noball),               # Button for no ball
+                Button("Adjustments", 710, 300, 200, 50, awaycolour, wide)              # Button for adjustments (wides, byes, etc.)
         ]
     elif bold_enabled == False:
         buttons2 = [ # (text, x, y, w, h, colour, action=None)
-                Button("Wicket", 50, 300, 100, 50, awaycolour, add_wicket), # Button for wicket
-                Button("No Ball", 300, 300, 100, 50, awaycolour, noball),   # Button for no ball
-                Button("Adjustments", 710, 300, 180, 50, awaycolour, wide) # Button for adjustments (wides, byes, etc.)
+                Button("Wicket", 50, 300, 100, 50, awaycolour, add_wicket),             # Button for wicket
+                Button("No Ball", 300, 300, 100, 50, awaycolour, noball),               # Button for no ball
+                Button("Adjustments", 710, 300, 180, 50, awaycolour, wide)              # Button for adjustments (wides, byes, etc.)
         ]
-    if overs < 1: # If the overs are less than 1, this means that the game has just started
-        run_rate = 0 # Sets the run rate to 0 as no runs have been scored yet
-    else: # If the overs are greater than or equal to 1, this means that the game has started and runs have been scored
-        run_rate = runs/numpy.round(overs, 1) # Makes the runrate (1 d.p.)
-        if run_rate > 36: # If the run rate is greater than 36, this means there is an error so it sets to 36
-            run_rate = 36 # This is the maximum run rate that can be achieved in a T20 game
-    if overs % 1 == 0: # If the overs are a whole number, this means that the over has just finished
-        if run_rate >= 36: # If the run rate is greater than or equal to 36, this means that the game is going too fast
-            run_rate = 36 # This is the maximum run rate that can be achieved in a T20 game
+    if overs < 1:                                                       # If the overs are less than 1, this means that the game has just started
+        run_rate = 0                                                    # Sets the run rate to 0 as no runs have been scored yet
+    else:                                                               # If the overs are greater than or equal to 1, this means that the game has started and runs have been scored
+        run_rate = runs/numpy.round(overs, 1)                           # Makes the runrate (1 d.p.)
+        if run_rate > 36:                                               # If the run rate is greater than 36, this means there is an error so it sets to 36
+            run_rate = 36                                               # This is the maximum run rate that can be achieved in a T20 game
+    if overs % 1 == 0:                                                  # If the overs are a whole number, this means that the over has just finished
+        if run_rate >= 36:                                              # If the run rate is greater than or equal to 36, this means that the game is going too fast
+            run_rate = 36                                               # This is the maximum run rate that can be achieved in a T20 game
         else:
-            predicted = (run_rate * (20 - numpy.round(overs, 1)))+runs # Calculates the projected total at the end of every over
+            predicted = (run_rate * (20 - numpy.round(overs, 1)))+runs  # Calculates the projected total at the end of every over
     
     final_score = state["last"]
     if innings == 2:
-        final_score = state["first_innings_score"] + 1  # Target = first innings score + 1
+        final_score = state["first_innings_score"] + 1                  # If it's the second innings, set the required score to the runs scored by team 1 then add 1 to win
+    
     # ----------------------------------------------------------------
     # Personified Scores Display
     # ----------------------------------------------------------------
@@ -335,58 +328,27 @@ while True:
     # The code checks the last letter of the team name and adds an apostrophe or 's' to the end of the team name depending on the last letter
     # If that is true, the team name is displayed correctly with the apostrophe or 's' at the end and then prints this in the caption bar and in the screen
     if innings == 1:
-        if innings1 == 1: # If it is the first innings, display the first batting team
             if shared.first_batting_team.endswith("s"): # If the first batting team ends with an 's', display it without the 's
                 personifiedname = f"{shared.first_batting_team}' Innings"
-                pygame.display.set_caption(f"{shared.first_batting_team}' Innings")
-
+                pygame.display.set_caption(f"{personifiedname}")
             else:
                 personifiedname = f"{shared.first_batting_team}'s Innings"
-                pygame.display.set_caption(f"{shared.first_batting_team}'s Innings")
-            draw_text(f"{personifiedname}", font, black, screen, 1000, 50) # Draw the first batting team name with the proper formatting
-            innings2 = 1
-            shared.first_batting_team = shared.home_team
-            shared.second_batting_team = shared.away_team
-
-        elif innings1 == 2:
-            if shared.first_batting_team.endswith("s"): # If the first batting team ends with an 's', display it without the 's
-                personifiedname = f"{shared.first_batting_team}' Innings"
-                pygame.display.set_caption(f"{shared.first_batting_team}' Innings")
-
-            else:
-                personifiedname = f"{shared.first_batting_team}'s Innings"
-                pygame.display.set_caption(f"{shared.first_batting_team}'s Innings")
-            
-            draw_text(f"{personifiedname}", font, black, screen, 1000, 50) # Draw the first batting team name with the proper formatting
-            innings2 = 2
-            shared.first_batting_team = shared.away_team
-            shared.second_batting_team = shared.home_team
-    
+                pygame.display.set_caption(f"{personifiedname}")
     elif innings == 2:
-        if innings2 == 1:
-            if shared.first_batting_team.endswith("s"): # If the first batting team ends with an 's', display it without the 's
-                personifiedname = f"{shared.first_batting_team}' Innings"
-                pygame.display.set_caption(f"{shared.first_batting_team}' Innings")
+            if shared.second_batting_team.endswith("s"): # If the second batting team ends with an 's', display it without the 's
+                personifiedname = f"{shared.second_batting_team}' Innings"
+                pygame.display.set_caption(f"{personifiedname}")
 
             else:
-                personifiedname = f"{shared.first_batting_team}'s Innings"
-                pygame.display.set_caption(f"{shared.first_batting_team}'s Innings")
-            draw_text(f"{personifiedname}", font, black, screen, 1000, 50) # Draw the first batting team name with the proper formatting
-        elif innings2 == 2:
-            if shared.first_batting_team.endswith("s"): # If the first batting team ends with an 's', display it without the 's
-                personifiedname = f"{shared.first_batting_team}' Innings"
-                pygame.display.set_caption(f"{shared.first_batting_team}' Innings")
-
-            else:
-                personifiedname = f"{shared.first_batting_team}'s Innings"
-                pygame.display.set_caption(f"{shared.first_batting_team}'s Innings")
-                
-            draw_text(f"{personifiedname}", font, black, screen, 1000, 50) # Draw the second batting team name with the proper formatting
-    # ----------------------------------------------------------------
-    # ----------------------------------------------------------------
-    if innings > 2:
+                personifiedname = f"{shared.second_batting_team}'s Innings"
+                pygame.display.set_caption(f"{personifiedname}")
+            
+# ----------------------------------------------------------------
+    
+    if innings > 2: # If innings 2 has been competed then get the result function
         result()
-    screen.fill(white)
+    
+    screen.fill(white) # Set the background colour for the screen
     
     if innings == 2: # If it is the second innings, check if the runs scored are greater than the first innings score
         if runs > state["first_innings_score"]: # If the runs scored are greater than the first innings score, the game is over
@@ -396,15 +358,15 @@ while True:
             result() # Call the result function to end the game and display the result
         draw_text(f"Required Runs: {final_score}", font, black, screen, 50, 500) # Draws the required runs to win the game
 # -----------------------------------------------------------------------------------------------------------------------------
-    if noball_status:
+    if noball_status:  # If the system has identified that it is a no-ball
         draw_text("Batter can only be out run out, hitting the ball twice or obstructing the field", font, red, screen, 200, 500) # Prints a warning about the quirks of a noball
 
     if bye_status:
         draw_text("How many byes?", font, red, screen, 200, 500) # Asks the user how many byes were scored
     
-    draw_text(f"Run Rate: {round(run_rate, 2)}", font, black, screen, 50, 700) # Print the various calculations made
-
-    draw_text(f"Predicted Score: {round(predicted, 0)}", font, black, screen, 50, 600) # Draw the predicted score
+    draw_text(f"Run Rate: {round(run_rate, 2)}", font, black, screen, 50, 700)              # Print the various calculations made
+    draw_text(f"{personifiedname}", font, black, screen, 1000, 50)                          # Draw the first batting team name with the proper formatting
+    draw_text(f"Predicted Score: {round(predicted, 0)}", font, black, screen, 50, 600)      # Draw the predicted score
 
     # Event handling
     for event in pygame.event.get(): # Get all the events from pygame
@@ -435,15 +397,13 @@ while True:
     draw_text(f"Start Time: {StartTime_string}", font, black, screen, 1000, 100) # Draw the start time of the game
 
     # ----------------------------------------------------------------
-    # ----------------------------------------------------------------
 
     # Draw the score display
-    draw_text(f"Runs: {runs}", font, black, screen, 50, 0) # Draws the runs scored so far
-    draw_text(f"Innings: {innings}", font, black, screen, 1000, 0) # Draws the innings number
-  
-    draw_text(f"Wickets: {wickets}", font, black, screen, 50, 50) # Draw the wickets scored so far
-    draw_text(f"Overs: {overs}", font, black, screen, 50, 100) # Draw the overs bowled so far
-    draw_text(f"Extras: {extras}", font, black, screen, 50, 150) # Draw the extras scored so far
+    draw_text(f"Runs: {runs}", font, black, screen, 50, 0)                          # Draws the runs scored so far
+    draw_text(f"Innings: {innings}", font, black, screen, 1000, 0)                  # Draws the innings number
+    draw_text(f"Wickets: {wickets}", font, black, screen, 50, 50)                   # Draw the wickets scored so far
+    draw_text(f"Overs: {overs}", font, black, screen, 50, 100)                      # Draw the overs bowled so far
+    draw_text(f"Extras: {extras}", font, black, screen, 50, 150)                    # Draw the extras scored so far
 
     # Draw buttons
     for button in buttons1:
