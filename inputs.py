@@ -164,6 +164,8 @@ def draw_text(text, font, colour, surface, x, y): # Function to draw text on the
     surface.blit(textobj, textrect) # Draw the text object on the surface at the specified position
 
 class Button:
+    HOVER_COLOUR = (180, 180, 180) # Defines the colour that the buttons are when the mouse is hovered over them, this is treated as an attribute and can be reffere
+
     def __init__(self, text, x, y, w, h, colour, action=None): # Initialises the button with the text, position, size, colour and action
         self.text = text # Text to be displayed on the button
         self.rect = pygame.Rect(x, y, w, h) # Creates a rectangle for the button with the position and size
