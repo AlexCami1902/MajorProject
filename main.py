@@ -359,10 +359,10 @@ while True:
         draw_text(f"Required Runs: {final_score}", font, black, screen, 50, 500) # Draws the required runs to win the game
 # -----------------------------------------------------------------------------------------------------------------------------
     if noball_status:  # If the system has identified that it is a no-ball
-        draw_text("Batter can only be out run out, hitting the ball twice or obstructing the field", font, red, screen, 200, 500) # Prints a warning about the quirks of a noball
+        draw_text("Batter can only be out run out, hitting the ball twice or obstructing the field", font, red, screen, 350, 500) # Prints a warning about the quirks of a noball
 
     if bye_status:
-        draw_text("How many byes?", font, red, screen, 200, 500) # Asks the user how many byes were scored
+        draw_text("How many byes?", font, red, screen, 350, 500) # Asks the user how many byes were scored
     
     draw_text(f"Run Rate: {round(run_rate, 2)}", font, black, screen, 50, 700)              # Print the various calculations made
     draw_text(f"{personifiedname}", font, black, screen, 1000, 50)                          # Draw the first batting team name with the proper formatting
