@@ -11,7 +11,7 @@ from shared import home_team_colour, away_team_colour
 
 pygame.init() # Initialize pygame
 state = {"last": None} # This sets the state of the game's dictionaty, this is used to store the last score of the game
-
+pitch_background = pygame.image.load('Background2.jpg')    # Loads the background image
 state["first_innings_score"] = 0 # Make the scores zero by default at the start of the game
 state["second_innings_score"] = 0 
 history = []  # Stores (overs, runs, wickets, extras) in that format for undo function later on
@@ -288,9 +288,9 @@ buttons1 = [ # (text, x, y, w, h, colour, action=None)
 ]
 
 bold_enabled = False # Variable to determine if the bold font is enabled or not, this is used to toggle between the regular and the bold font
-
 # Main game loop
 while True:
+    screen.blit(pitch_background, (0, 0))  # Draws the background
     if overs == 20: # When the innings/game is completed start the read score function to commence calculations
         read_score()
     if bold_enabled == True: # Testing revealed that when the bold function is enabled the Wicket bututon would not display fully, this aims to fix this issue.
@@ -348,7 +348,7 @@ while True:
     if innings > 2: # If innings 2 has been competed then get the result function
         result()
     
-    screen.fill(white) # Set the background colour for the screen
+    
     
     if innings == 2: # If it is the second innings, check if the runs scored are greater than the first innings score
         if runs > state["first_innings_score"]: # If the runs scored are greater than the first innings score, the game is over
@@ -395,7 +395,7 @@ while True:
     draw_text(f"Duration: {duration_str}", font, black, screen, 1000, 200) # Draw the duration of the game
     draw_text(f"Current Time: {current_time_string}", font, black, screen, 1000, 150) # Draw the current time of the game
     draw_text(f"Start Time: {StartTime_string}", font, black, screen, 1000, 100) # Draw the start time of the game
-
+    
     # ----------------------------------------------------------------
 
     # Draw the score display
@@ -410,6 +410,7 @@ while True:
         button.draw(screen)
     for button in buttons2:
         button.draw(screen)
+    
 
     # Update display
     pygame.display.update()
