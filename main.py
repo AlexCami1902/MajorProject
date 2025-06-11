@@ -164,11 +164,11 @@ def add_wicket():                                                               
     global noball_status
     bye_status = False                                                              # Sets the bye status to false to let the code know to trigger the various events
     noball_status = False                                                           # Sets the no-ball status to false to let the code know to trigger the various events
-    if wickets < 10:                                                                # If the number of wickets is less than 10, this means that there are still wickets left to take
+    if wickets < 9:                                                                # If the number of wickets is less than 10, this means that there are still wickets left to take
         history.append((overs, runs, wickets, extras, noball_status, bye_status))   # Saves the current state of play before making any changes
         wickets += 1                                                                # Adds 1 to the number of wickets
         add_ball()                                                                  # Calls the add_ball function to add a ball to the overs and update the score
-    elif wickets == 10:                                                             # If the number of wickets is 10, this means that there are no wickets left to take
+    elif wickets == 9:                                                             # If the number of wickets is 10, this means that there are no wickets left to take
         read_score()                                                                # Calls the read_score function to end the innings and display the score
 
 def add_ball():
